@@ -1,0 +1,10 @@
+<div class="nav">
+    <div *ngIf="user != null" class="tabs" style="display: flex; justify-content: center; text-align: center;">
+        <span style="font-size: 17px; color: #ff4081; vertical-align: middle; margin-top: 23px;">{{ user.displayName }}</span>
+        <button style="height: 100%; font-size: 17px; margin-left: 20px;" mat-button color="accent" (click)="authService.SignOut()">Sign Out</button>
+    </div>
+    <div *ngIf="user == null" class="tabs">
+        <button style="height: 100%; width: 50%; font-size: 17px;" mat-button color="accent" [routerLink]="['sign-in']">Sign In</button>
+        <button style="height: 100%; width: 50%; font-size: 17px;" mat-button color="accent" [routerLink]="['sign-up']">Sign Up</button>
+    </div>
+</div>

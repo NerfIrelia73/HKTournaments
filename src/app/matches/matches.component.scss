@@ -1,0 +1,13 @@
+.panelContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.panelBox {
+    display: block;
+    white-space: normal;
+    width: 100%;
+    word-wrap: break-word;
+    text-align: center;
+}

@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthService } from "../shared/services/auth.service";
+import { User } from '../shared/services/user';
 
 @Component({
   selector: 'app-top-navbar',
@@ -10,11 +12,11 @@ import { AuthService } from "../shared/services/auth.service";
 export class TopNavbarComponent implements OnInit {
 
   constructor(
-    public authService: AuthService
+    public authService: AuthService,
+    public afs: AngularFirestore
   ) { }
 
-  @Output() newModeEvent = new EventEmitter<number>();
-  @Input() public user: any;
+  @Input() displayName: String = ""
 
   ngOnInit(): void {
   }

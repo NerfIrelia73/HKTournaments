@@ -1,0 +1,38 @@
+<div class="example-action-buttons" style="margin-left: 20px; color: white;">
+    <button mat-button (click)="accordion.openAll()">Expand All</button>
+    <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+  </div>
+  <mat-accordion class="example-headers-align" multi>
+    <mat-expansion-panel *ngFor="let source of dataSource" style="width: 60%; margin-left: 20px;">
+      <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'">
+        <div class="panelContainer">
+            <div class="panelBox">
+                <span><strong>Runners</strong></span><br>
+                <span>{{ source.runners }}</span>
+            </div>
+            <div class="panelBox">
+                <span><strong>Comms</strong></span><br>
+                <span>{{ source.comms }}</span>
+            </div>
+            <div class="panelBox">
+                <span><strong>Restreamer</strong></span><br>
+                <span>{{ source.restreamer }}</span>
+            </div>
+            <div class="panelBox">
+                <span><strong>Date</strong></span><br>
+                <span>{{ source.date }}</span>
+            </div>
+            <div class="panelBox">
+                <span><strong>Locked</strong></span><br>
+                <span>{{ source.locked }}</span>
+            </div>
+        </div>
+      </mat-expansion-panel-header>
+
+      <div class="panelContainer">
+        <div class="panelBox" style="text-align: left;">
+            <span *ngFor="let runner of source.participantInfo" style="display: block; margin-bottom: 4px;">{{ runner }}</span><br>
+        </div>
+    </div>
+    </mat-expansion-panel>
+  </mat-accordion>

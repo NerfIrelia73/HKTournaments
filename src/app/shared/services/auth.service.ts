@@ -7,48 +7,49 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   userData: any; // Save logged in user data
-  public userInfo: any;
   constructor(
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
     public ngZone: NgZone, // NgZone service to remove outside scope warning
   ) {
-    /* Saving user data in localstorage when
-    logged in and setting up null when logged out */
-    this.afAuth.authState.subscribe((user) => {
-      console.log("We changed")
-      console.log(user)
-      if (user) {
-        this.userData = user;
-        localStorage.setItem('user', JSON.stringify(this.userData));
-        console.log(JSON.parse(localStorage.getItem('user')!));
-        console.log(user.uid)
-        this.afs.collection('users', ref => ref.where('uid', '==', user.uid)).valueChanges().subscribe(
-          val => this.userInfo = val
-        );
-      } else {
-        localStorage.setItem('user', 'null');
-        console.log(JSON.parse(localStorage.getItem('user')!));
+    this.authStatusListener();
+  }
+
+  currentUser: any = null
+  private authStatusSub = new BehaviorSubject(this.currentUser);
+  currentAuthStatus = this.authStatusSub.asObservable();
+
+
+  authStatusListener(){
+    this.afAuth.onAuthStateChanged((credential)=>{
+      if(credential){
+        console.log(credential.email);
+        this.authStatusSub.next(credential.uid);
+        console.log('User is logged in');
+        localStorage.setItem('user', JSON.stringify(credential));
       }
-    });
+      else{
+        this.authStatusSub.next(null);
+        console.log('User is logged out');
+      }
+    })
   }
   // Sign in with email/password
   async SignIn(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        setTimeout(() => {
           console.log("We signed in")
           this.ngZone.run(() => {
             this.router.navigate(['/']);
           });
-        }, 200)
       })
       .catch((error) => {
         window.alert(error.message);
@@ -92,6 +93,11 @@ export class AuthService {
     const user = JSON.parse(localStorage.getItem('user')!);
     return user !== null;
   }
+
+  // getUserInfo(): Observable<User[]> {
+  //   console.log("Hello there")
+  //   return of(this.userInfo)
+  // }
 
   // Auth logic to run auth providers
   async AuthLogin(provider: any) {

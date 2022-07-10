@@ -65,15 +65,19 @@ export class MatchesComponent implements OnInit {
     for (const match of matches) {
       const participantInfo = []
       let runners = `${match.runners[0].displayName}`
+      let runnerCommand = `!editcom !runners ${match.runners[0].displayName}: ${match.runners[0].twitch}`
+      let commsCommand = `!editcom !comms ${match.comms[0].displayName}: ${match.comms[0].twitch}`
       participantInfo.push(`${match.runners[0].displayName}: ${match.runners[0].discordId}, ${match.runners[0].pronouns}`)
       for (let i = 1; i < match.runners.length; i++) {
         runners += `, ${match.runners[i].displayName}`
+        runnerCommand += `, ${match.runners[i].displayName}: ${match.runners[i].twitch}`
         participantInfo.push(`${match.runners[i].displayName}: ${match.runners[i].discordId}, ${match.runners[i].pronouns}`)
       }
       let comms = `${match.comms[0].displayName}`
       participantInfo.push(`${match.comms[0].displayName}: ${match.comms[0].discordId}, ${match.comms[0].pronouns}`)
       for (let i = 1; i < match.comms.length; i++) {
         comms += `, ${match.comms[i].displayName}`
+        commsCommand += `, ${match.comms[i].displayName}: ${match.comms[i].twitch}`
         participantInfo.push(`${match.comms[i].displayName}: ${match.comms[i].discordId}, ${match.comms[i].pronouns}`)
       }
       let restreamer = `${match.restreamer[0].displayName}`
@@ -88,7 +92,8 @@ export class MatchesComponent implements OnInit {
         restreamer: restreamer,
         date: match.date,
         locked: match.locked,
-        participantInfo: participantInfo
+        participantInfo: participantInfo,
+        commands: [runnerCommand, commsCommand]
       })
     }
     this.dataSource = [...this.dataSource]

@@ -3,7 +3,7 @@
     <button mat-button (click)="accordion.closeAll()">Collapse All</button>
   </div>
   <mat-accordion class="example-headers-align" multi>
-    <mat-expansion-panel *ngFor="let source of dataSource" style="width: 60%; margin-left: 20px;">
+    <mat-expansion-panel *ngFor="let source of dataSource" style="width: 60%; margin-left: 20px;" [ngStyle]="{'background-color': source.locked ? '#90EE90' : '#FFFFFF'}">
       <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'">
         <div class="panelContainer">
             <div class="panelBox">
@@ -23,8 +23,8 @@
                 <span>{{ source.date }}</span>
             </div>
             <div class="panelBox">
-                <span><strong>Locked</strong></span><br>
-                <span>{{ source.locked }}</span>
+                <span><strong>Confirmed</strong></span><br>
+                <span>{{ source.locked ? 'Yes' : 'No' }}</span>
             </div>
         </div>
       </mat-expansion-panel-header>
@@ -32,6 +32,9 @@
       <div class="panelContainer">
         <div class="panelBox" style="text-align: left;">
             <span *ngFor="let runner of source.participantInfo" style="display: block; margin-bottom: 4px;">{{ runner }}</span><br>
+        </div>
+        <div class="panelBox" style="text-align: left;">
+            <span *ngFor="let command of source.commands" style="display: block; margin-bottom: 4px;">{{ command }}</span><br>
         </div>
     </div>
     </mat-expansion-panel>

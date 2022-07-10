@@ -27,6 +27,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { MatchesComponent } from './matches/matches.component';
+import { CreateMatchComponent } from './create-match/create-match.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { MatchesComponent } from './matches/matches.component';
     SignUpComponent,
     ForgotPasswordComponent,
     VerifyEmailComponent,
-    MatchesComponent
+    MatchesComponent,
+    CreateMatchComponent
   ],
   imports: [
     BrowserModule,
@@ -60,6 +62,7 @@ import { MatchesComponent } from './matches/matches.component';
       { path: 'sign-up', component: SignUpComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'verify-email-address', component: VerifyEmailComponent },
+      { path: 'create-match', component: CreateMatchComponent}
     ]),
   ],
   providers: [AuthService],

@@ -8,3 +8,9 @@ export interface User {
     photoURL: string;
     emailVerified: boolean;
  }
+
+ export interface Participant {
+    uid: string;
+    admin: boolean;
+    superadmin: boolean;
+ }

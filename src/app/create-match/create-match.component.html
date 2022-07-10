@@ -1,0 +1,19 @@
+<div style="display: flex; justify-content: center;">
+    <mat-card style="width: 40%; margin-top: 100px;">
+        <mat-card-title>Create a Match</mat-card-title>
+        <mat-card-subtitle>Select Runners</mat-card-subtitle>
+        <mat-form-field appearance="fill">
+            <mat-label>Runners</mat-label>
+            <mat-select [formControl]="selectedParticipants" multiple>
+              <mat-option *ngFor="let participant of participantList" [value]="participant.displayName">{{ participant.displayName }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <span><strong>Selected Runners: </strong>{{ selectedParticipants.value }}</span>
+        <mat-card-subtitle style="margin-top: 10px;">Select a Date and Time</mat-card-subtitle>
+        <mat-card-actions align="end">
+            <button mat-button>Back</button>
+            <button mat-button>Create</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

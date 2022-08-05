@@ -16,6 +16,29 @@ export class CreateMatchComponent implements OnInit {
 
   runnerList: Participant[] = []
   participantList: User[] = []
+  selectedParticipants = new FormControl('')
+  selectedTime = new FormControl('')
+  selectedDate = new FormControl(Date)
+  loading = false
+
+  availableTimes: {time: string, value: string}[] = [
+    { time: "12:30 AM", value: "00:30" },
+    { time: "2:00 AM", value: "02:00" },
+    { time: "3:30 AM", value: "03:30" },
+    { time: "5:00 AM", value: "05:00" },
+    { time: "6:30 AM", value: "06:30" },
+    { time: "8:00 AM", value: "08:00" },
+    { time: "9:30 AM", value: "09:30" },
+    { time: "11:00 AM", value: "11:00" },
+    { time: "12:30 PM", value: "12:30" },
+    { time: "2:00 PM", value: "14:00" },
+    { time: "3:30 PM", value: "15:30" },
+    { time: "5:00 PM", value: "17:00" },
+    { time: "6:30 PM", value: "18:30" },
+    { time: "8:00 PM", value: "20:00" },
+    { time: "9:30 PM", value: "21:30" },
+    { time: "11:00 PM", value: "23:00" }
+  ]
 
   ngOnInit(): void {
       this.afs.collection('users').valueChanges().subscribe(
@@ -38,6 +61,25 @@ export class CreateMatchComponent implements OnInit {
       );
   }
 
-  selectedParticipants = new FormControl('');
+  addMatch() {
+    if (!this.loading) {
+      this.loading = true
+      console.log("We are adding the match")
+      const d = new Date(Date.UTC(this.selectedDate.value.getFullYear(), this.selectedDate.value.getMonth(), this.selectedDate.value.getDate(), this.selectedTime.value.split(":")[0], this.selectedTime.value.split(":")[1], 0))
+      console.log(d.toUTCString())
+      console.log(this.selectedParticipants.value)
+      const finalRunners = this.participantList.filter(user => {
+        return this.selectedParticipants.value.includes(user.displayName)
+      }).map(a => a.uid)
+      console.log(finalRunners)
+      this.afs.collection("tournaments/2cFP7NykXFZhEG06HpAL/matches").add({
+        comms: [],
+        date: d,
+        restreamer: [],
+        runners: finalRunners,
+        locked: false
+      })
+    }
+  }
 
 }

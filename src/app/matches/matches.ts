@@ -6,4 +6,5 @@ export interface Match {
     restreamer: User[];
     date: string;
     locked: boolean;
+    matchId: string;
 }

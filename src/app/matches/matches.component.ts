@@ -174,4 +174,29 @@ export class MatchesComponent implements OnInit {
     this.afs.doc(`tournaments/2cFP7NykXFZhEG06HpAL/matches/${matchId}`).delete()
   }
 
+  toggleSignUp(choice: string, source: any) {
+    const index = this.dataSource.findIndex((match) => match.matchId == source.matchId)
+    if (choice == "comms") {
+      let commsForm = source.commsForm.value
+      if (this.dataSource[index].commsForm.value.includes(this.adminInfo.uid)) {
+        commsForm = commsForm.filter(item => item != this.adminInfo.uid)
+      } else {
+        commsForm.push(this.adminInfo.uid)
+      }
+      this.afs.doc(`tournaments/2cFP7NykXFZhEG06HpAL/matches/${source.matchId}`).update({
+        comms: commsForm,
+      })
+    } else if (choice == "restreamer") {
+      let restreamerForm = source.restreamerForm.value
+      if (this.dataSource[index].restreamerForm.value.includes(this.adminInfo.uid)) {
+        restreamerForm = restreamerForm.filter(item => item != this.adminInfo.uid)
+      } else {
+        restreamerForm.push(this.adminInfo.uid)
+      }
+      this.afs.doc(`tournaments/2cFP7NykXFZhEG06HpAL/matches/${source.matchId}`).update({
+        restreamer: restreamerForm,
+      })
+    }
+  }
+
 }

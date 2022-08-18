@@ -28,7 +28,7 @@ export class HomePageComponent implements OnInit {
           this.afs.collection('tournaments/2cFP7NykXFZhEG06HpAL/participants', ref => ref.where('uid', '==', this.userInfo[0].uid)).valueChanges().subscribe(
             info => {
               this.adminInfo = info[0] as adminInfo
-              console.log(this.adminInfo)
+              this.adminInfo.displayName = this.userInfo[0].displayName
             }
           );
         }

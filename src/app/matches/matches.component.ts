@@ -41,11 +41,11 @@ export class MatchesComponent implements OnInit {
       console.log(this.dataSource)
       this.dataSource = this.dataSource.filter(value => {
         const tmp = resp.map(a => a.payload.doc.id)
-        console.log(tmp)
-        console.log(value.matchId)
-        console.log(tmp.includes(value.matchId))
+        //console.log(tmp)
+        //console.log(value.matchId)
+        //console.log(tmp.includes(value.matchId))
         return tmp.includes(value.matchId)
-    })
+      })
       console.log(this.dataSource)
       console.log(this.resetDataSource)
     });

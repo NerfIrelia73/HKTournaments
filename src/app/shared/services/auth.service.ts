@@ -79,6 +79,7 @@ export class AuthService {
   }
   // Reset Forggot password
   async ForgotPassword(passwordResetEmail: string) {
+    console.log(passwordResetEmail)
     return this.afAuth
       .sendPasswordResetEmail(passwordResetEmail)
       .then(() => {
@@ -129,9 +130,21 @@ export class AuthService {
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
     };
-    return userRef.set(userData, {
+    userRef.set(userData, {
       merge: true,
     });
+
+    const participationData = {
+      admin: false,
+      superadmin: false,
+      uid: user.uid
+    }
+
+    this.afs.collection("tournaments/2cFP7NykXFZhEG06HpAL/participants").add(
+      participationData
+    )
+
+    return "User data set successfully"
   }
   // Sign out
   async SignOut() {

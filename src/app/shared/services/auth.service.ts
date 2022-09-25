@@ -30,14 +30,11 @@ export class AuthService {
   authStatusListener(){
     this.afAuth.onAuthStateChanged((credential)=>{
       if(credential){
-        console.log(credential.email);
         this.authStatusSub.next(credential.uid);
-        console.log('User is logged in');
         localStorage.setItem('user', JSON.stringify(credential));
       }
       else{
         this.authStatusSub.next(null);
-        console.log('User is logged out');
       }
     })
   }
@@ -46,7 +43,6 @@ export class AuthService {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-          console.log("We signed in")
           this.ngZone.run(() => {
             this.router.navigate(['/']);
           });
@@ -79,7 +75,6 @@ export class AuthService {
   }
   // Reset Forggot password
   async ForgotPassword(passwordResetEmail: string) {
-    console.log(passwordResetEmail)
     return this.afAuth
       .sendPasswordResetEmail(passwordResetEmail)
       .then(() => {
@@ -96,7 +91,6 @@ export class AuthService {
   }
 
   // getUserInfo(): Observable<User[]> {
-  //   console.log("Hello there")
   //   return of(this.userInfo)
   // }
 

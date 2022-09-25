@@ -2,6 +2,8 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
+import { NavigationEnd, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { adminInfo } from '../home-page/participant';
 import { User } from '../shared/services/user';
 
@@ -12,22 +14,24 @@ import { User } from '../shared/services/user';
 })
 export class MatchesComponent implements OnInit {
 
-  constructor(public afs: AngularFirestore) { }
+  constructor(public afs: AngularFirestore, public router: Router) {
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd && val.url != '/') {
+        this.subscription.unsubscribe()
+      }
+  });
+  }
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @Input() adminInfo: adminInfo = null
   displayedColumns: string[] = ['Runners', 'Comms', 'Restreamer', 'Date', 'Locked']
   dataSource = []
   resetDataSource = []
+  subscription: Subscription = null;
 
   ngOnInit(): void {
-    this.afs.collection('tournaments/2cFP7NykXFZhEG06HpAL/matches').snapshotChanges().subscribe(async (resp) => {
-      console.log("We have received the matches")
-      console.log(resp)
+    this.subscription = this.afs.collection('tournaments/2cFP7NykXFZhEG06HpAL/matches').snapshotChanges().subscribe(async (resp) => {
       for (const item of resp) {
-        console.log(item.payload.doc.data())
-        console.log(item.payload.doc.id)
-        console.log(item.type)
         const index = this.dataSource.findIndex((source) => source.matchId == item.payload.doc.id)
         if (item.type == "added" && index == -1) {
           const dataEntry = await this.createDataEntry(item.payload.doc.data(), item.payload.doc.id)
@@ -38,16 +42,10 @@ export class MatchesComponent implements OnInit {
           this.dataSource[index] = dataEntry
         }
       }
-      console.log(this.dataSource)
       this.dataSource = this.dataSource.filter(value => {
         const tmp = resp.map(a => a.payload.doc.id)
-        //console.log(tmp)
-        //console.log(value.matchId)
-        //console.log(tmp.includes(value.matchId))
         return tmp.includes(value.matchId)
       })
-      console.log(this.dataSource)
-      console.log(this.resetDataSource)
     });
   }
 
@@ -138,18 +136,14 @@ export class MatchesComponent implements OnInit {
         if (doc.exists) {
           retList.push(doc.data() as User)
         } else {
-          console.log("There is no document!");
         }
       }).catch(function (error) {
-        console.log("There was an error getting your document:", error);
       });
     }
     return retList
   }
 
   toggleConfirm(source: any) {
-    console.log("We are confirmed or unconfirming the match")
-    console.log(source)
     this.afs.doc(`tournaments/2cFP7NykXFZhEG06HpAL/matches/${source.matchId}`).update({
       comms: source.commsForm.value,
       restreamer: source.restreamerForm.value,
@@ -158,8 +152,6 @@ export class MatchesComponent implements OnInit {
   }
 
   resetMatch(matchId: string) {
-    console.log("We are resetting the match")
-    console.log(matchId)
     const index = this.dataSource.findIndex((match) => match.matchId == matchId)
     const indexCopy = this.resetDataSource.findIndex((match) => match.matchId == matchId)
     this.dataSource[index].commsForm.setValue(this.resetDataSource[indexCopy].commsForm.value)
@@ -169,8 +161,6 @@ export class MatchesComponent implements OnInit {
   }
 
   deleteMatch(matchId: string) {
-    console.log("We are deleting the match")
-    console.log(matchId)
     this.afs.doc(`tournaments/2cFP7NykXFZhEG06HpAL/matches/${matchId}`).delete()
   }
 
@@ -198,5 +188,4 @@ export class MatchesComponent implements OnInit {
       })
     }
   }
-
 }

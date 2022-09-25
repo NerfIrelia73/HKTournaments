@@ -3,18 +3,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { fas, faQuestionCircle, faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from "./shared/services/auth.service";
 import { AuthGuard } from './shared/guard/auth.guard';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularMaterialModule } from './angular-material.module';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TopNavbarComponent } from './top-navbar/top-navbar.component';
 import { HomePageComponent } from './home-page/home-page.component';
-import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -44,7 +41,6 @@ import { CreateMatchComponent } from './create-match/create-match.component';
   imports: [
     BrowserModule,
     FormsModule,
-    FontAwesomeModule,
     NgbModule,
     HttpClientModule,
     ReactiveFormsModule,
@@ -70,8 +66,6 @@ import { CreateMatchComponent } from './create-match/create-match.component';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(library: FaIconLibrary) {
-    library.addIconPacks(fas);
-    library.addIcons(faArrowDown, faArrowUp, faQuestionCircle);
+  constructor() {
   }
 }

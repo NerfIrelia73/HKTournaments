@@ -19,22 +19,23 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.currentAuthStatus.subscribe(authStatus => {
-      console.log(authStatus)
       this.isAuthenticated = authStatus
       this.afs.collection('users', ref => ref.where('uid', '==', this.isAuthenticated)).valueChanges().subscribe(
         val => {
           this.userInfo = val as User[]
-          console.log(JSON.stringify(this.userInfo))
-          this.afs.collection('tournaments/2cFP7NykXFZhEG06HpAL/participants', ref => ref.where('uid', '==', this.userInfo[0].uid)).valueChanges().subscribe(
-            info => {
-              this.adminInfo = info[0] as adminInfo
-              this.adminInfo.displayName = this.userInfo[0].displayName
-            }
-          );
+          try {
+            this.afs.collection('tournaments/2cFP7NykXFZhEG06HpAL/participants', ref => ref.where('uid', '==', this.userInfo[0].uid)).valueChanges().subscribe(
+              info => {
+                this.adminInfo = info[0] as adminInfo
+                this.adminInfo.displayName = this.userInfo[0].displayName
+              }
+            );
+          } catch(e) {
+            //console.log(e);
+          }
         }
       );
     })
-    console.log(this.authService.currentAuthStatus)
   }
 
 }

@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
 import { Participant, User } from '../shared/services/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-match',
@@ -11,7 +12,7 @@ import { Participant, User } from '../shared/services/user';
 })
 export class CreateMatchComponent implements OnInit {
 
-  constructor(public authService: AuthService, public afs: AngularFirestore) { }
+  constructor(public authService: AuthService, public afs: AngularFirestore, public router: Router) { }
 
 
   runnerList: Participant[] = []
@@ -64,20 +65,18 @@ export class CreateMatchComponent implements OnInit {
   addMatch() {
     if (!this.loading) {
       this.loading = true
-      console.log("We are adding the match")
       const d = new Date(Date.UTC(this.selectedDate.value.getFullYear(), this.selectedDate.value.getMonth(), this.selectedDate.value.getDate(), this.selectedTime.value.split(":")[0], this.selectedTime.value.split(":")[1], 0))
-      console.log(d.toUTCString())
-      console.log(this.selectedParticipants.value)
       const finalRunners = this.participantList.filter(user => {
         return this.selectedParticipants.value.includes(user.displayName)
       }).map(a => a.uid)
-      console.log(finalRunners)
       this.afs.collection("tournaments/2cFP7NykXFZhEG06HpAL/matches").add({
         comms: [],
         date: d,
         restreamer: [],
         runners: finalRunners,
         locked: false
+      }).then(() => {
+        this.router.navigate([''])
       })
     }
   }

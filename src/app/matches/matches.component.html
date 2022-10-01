@@ -22,7 +22,8 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <button mat-raised-button color="primary" *ngIf="!source.locked" (click)="toggleSignUp('comms', source)">{{ !source.commsForm.value.includes(this.adminInfo.uid) ? 'Sign Up' : 'Cancel' }}</button>
+                        <!-- <button mat-raised-button color="primary" *ngIf="!source.locked" (click)="toggleSignUp('comms', source)">{{ !source.commsForm.value.includes(this.adminInfo.uid) ? 'Sign Up' : 'Cancel' }}</button> -->
+                        <button mat-raised-button color="primary" *ngIf="!source.locked">{{ !source.commsForm.value.includes(this.adminInfo.uid) ? 'Sign Up' : 'Cancel' }}</button>
                     </div>
                     <div class="panelBox">
                         <span><strong>Restreamer</strong></span><br>
@@ -35,7 +36,8 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <button mat-raised-button color="primary" *ngIf="!source.locked" (click)="toggleSignUp('restreamer', source)">{{ !source.restreamerForm.value.includes(this.adminInfo.uid) ? 'Sign Up' : 'Cancel' }}</button>
+                        <!-- <button mat-raised-button color="primary" *ngIf="!source.locked" (click)="toggleSignUp('restreamer', source)">{{ !source.restreamerForm.value.includes(this.adminInfo.uid) ? 'Sign Up' : 'Cancel' }}</button> -->
+                        <button mat-raised-button color="primary" *ngIf="!source.locked">{{ !source.restreamerForm.value.includes(this.adminInfo.uid) ? 'Sign Up' : 'Cancel' }}</button>
                     </div>
                     <div class="panelBox">
                         <span><strong>Date</strong></span><br>

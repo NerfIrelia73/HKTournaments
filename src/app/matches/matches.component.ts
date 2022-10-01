@@ -6,6 +6,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { adminInfo } from '../home-page/participant';
 import { User } from '../shared/services/user';
+import { UserListService } from '../user-list.service';
 
 @Component({
   selector: 'app-matches',
@@ -14,7 +15,7 @@ import { User } from '../shared/services/user';
 })
 export class MatchesComponent implements OnInit {
 
-  constructor(public afs: AngularFirestore, public router: Router) {
+  constructor(public afs: AngularFirestore, public router: Router, public userService: UserListService) {
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd && val.url != '/') {
         this.subscription.unsubscribe()
@@ -27,9 +28,11 @@ export class MatchesComponent implements OnInit {
   displayedColumns: string[] = ['Runners', 'Comms', 'Restreamer', 'Date', 'Locked']
   dataSource = []
   resetDataSource = []
+  userList: User[] = []
   subscription: Subscription = null;
 
   ngOnInit(): void {
+    this.userList = this.userService.getUserList()
     this.subscription = this.afs.collection('tournaments/2cFP7NykXFZhEG06HpAL/matches').snapshotChanges().subscribe(async (resp) => {
       for (const item of resp) {
         const index = this.dataSource.findIndex((source) => source.matchId == item.payload.doc.id)
@@ -132,13 +135,20 @@ export class MatchesComponent implements OnInit {
   async getUsers(users: string[]): Promise<User[]> {
     const retList: User[] = []
     for (const user of users) {
-      await this.afs.collection('users').doc(user).ref.get().then(function (doc) {
-        if (doc.exists) {
-          retList.push(doc.data() as User)
-        } else {
-        }
-      }).catch(function (error) {
-      });
+      if (this.userList.map(a => a.uid).includes(user)) {
+        retList.push(this.userList.filter(item => item.uid == user)[0])
+      } else {
+        let tmpUser: User = null
+        await this.afs.collection('users').doc(user).ref.get().then(function (doc) {
+          if (doc.exists) {
+            retList.push(doc.data() as User)
+            tmpUser = doc.data() as User
+          }
+        }).catch(function (error) {
+
+        });
+        this.userService.addToList(tmpUser)
+      }
     }
     return retList
   }

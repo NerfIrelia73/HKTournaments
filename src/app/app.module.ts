@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from "./shared/services/auth.service";
 import { AuthGuard } from './shared/guard/auth.guard';
+import { UserListService } from "./user-list.service";
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularMaterialModule } from './angular-material.module';
 
@@ -61,7 +62,7 @@ import { CreateMatchComponent } from './create-match/create-match.component';
       { path: 'create-match', component: CreateMatchComponent}
     ]),
   ],
-  providers: [AuthService],
+  providers: [AuthService, UserListService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

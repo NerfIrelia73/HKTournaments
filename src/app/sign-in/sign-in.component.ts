@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ScheduleComponent } from '../modals/schedule/schedule.component';
 import { AuthService } from "../shared/services/auth.service";
+import { faEnvelope, faLock, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -8,9 +11,20 @@ import { AuthService } from "../shared/services/auth.service";
 })
 export class SignInComponent implements OnInit {
   constructor(
-    public authService: AuthService
+    public authService: AuthService, private modalService: NgbModal
   ) { }
-  form: FormGroup = new FormGroup({
-  });
+
+  faEnvelope = faEnvelope
+  faLock = faLock
+  faChevronRight = faChevronRight
+
   ngOnInit() { }
+
+  openSchedule() {
+    this.modalService.open(ScheduleComponent, {
+      size: 'xl',
+      centered: true,
+      windowClass: 'dark-modal'
+    });
+  }
 }

@@ -29,7 +29,7 @@ export class MatchesComponent implements OnInit {
   dataSource = []
   resetDataSource = []
   userList: User[] = []
-  subscription: Subscription = null;
+  subscription: Subscription = null
 
   ngOnInit(): void {
     this.userList = this.userService.getUserList()

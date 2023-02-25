@@ -29,8 +29,7 @@
         </div>
         <mat-card-actions align="end">
             <button mat-button routerLink="">Back</button>
-            <!-- <button mat-button (click)="addMatch()" [disabled]="selectedParticipants.value.length != 2 || selectedTime.value.length == 0 || selectedDate.status == 'INVALID'">Create</button> -->
-            <button mat-button (click)="addMatch()" [disabled]="true">Create</button>
+            <button mat-button (click)="addMatch()" [disabled]="selectedParticipants.value.length != 2 || selectedTime.value.length == 0 || selectedDate.status == 'INVALID'">Create</button>
         </mat-card-actions>
     </mat-card>
 </div>

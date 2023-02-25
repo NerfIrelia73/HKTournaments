@@ -1,0 +1,44 @@
+<div class="modal-header bg-info" style="border-bottom: none;">
+    <h4 class="modal-title">Schedule</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body bg-info">
+<mat-accordion class="example-headers-align" multi>
+    <div *ngFor="let source of dataSource" style=" display: flex; justify-content: center;">
+        <mat-expansion-panel style="width: 80%; margin-left: 20px; margin-bottom: 20px;" [ngStyle]="{'background-color': source.locked ? '#46b52a' : '#7a7a7a'}">
+            <mat-expansion-panel-header [collapsedHeight]="'130px'" [expandedHeight]="'130px'">
+                <div class="panelContainer">
+                    <div class="panelBox">
+                        <span><strong>Runners</strong></span><br>
+                        <span>{{ source.runners }}</span><br *ngIf="source.runners.length > 0">
+                    </div>
+                    <div class="panelBox">
+                        <span><strong>Comms</strong></span><br>
+                        <span>{{ source.comms }}</span>
+                    </div>
+                    <div class="panelBox">
+                        <span><strong>Restreamer</strong></span><br>
+                        <span>{{ source.restreamer }}</span>
+                    </div>
+                    <div class="panelBox">
+                        <span><strong>Date</strong></span><br>
+                        <span>{{ source.date }}</span>
+                    </div>
+                    <div class="panelBox">
+                        <span><strong>Confirmed</strong></span><br>
+                        <span>{{ source.locked ? 'Yes' : 'No' }}</span>
+                    </div>
+                </div>
+            </mat-expansion-panel-header>
+
+            <div class="panelContainer">
+                <div class="panelBox" style="text-align: left;">
+                    <span *ngFor="let runner of source.participantInfo" style="display: block; margin-bottom: 4px;">{{ runner }}</span><br>
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </div>
+    </mat-accordion>
+</div>

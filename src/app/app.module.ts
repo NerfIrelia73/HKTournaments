@@ -9,6 +9,8 @@ import { AuthGuard } from './shared/guard/auth.guard';
 import { UserListService } from "./user-list.service";
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularMaterialModule } from './angular-material.module';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faEnvelope, faLock, faUser, faHashtag, faGamepad, faVenusMars, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 import { AppComponent } from './app.component';
 import { TopNavbarComponent } from './top-navbar/top-navbar.component';
@@ -26,6 +28,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { MatchesComponent } from './matches/matches.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
+import { ScheduleComponent } from './modals/schedule/schedule.component'
 
 @NgModule({
   declarations: [
@@ -37,12 +40,14 @@ import { CreateMatchComponent } from './create-match/create-match.component';
     ForgotPasswordComponent,
     VerifyEmailComponent,
     MatchesComponent,
-    CreateMatchComponent
+    CreateMatchComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     NgbModule,
+    FontAwesomeModule,
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -67,6 +72,7 @@ import { CreateMatchComponent } from './create-match/create-match.component';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor() {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faEnvelope, faLock, faUser, faHashtag, faGamepad, faVenusMars, faChevronRight);
   }
 }

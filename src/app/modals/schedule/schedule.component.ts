@@ -21,8 +21,9 @@ export class ScheduleComponent implements OnInit {
   subscription: Subscription = null
 
   ngOnInit(): void {
+
     this.userList = this.userService.getUserList()
-    this.subscription = this.afs.collection('tournaments/2cFP7NykXFZhEG06HpAL/matches').snapshotChanges().subscribe(async (resp) => {
+    this.subscription = this.afs.collectionGroup('matches').snapshotChanges().subscribe(async (resp) => {
       for (const item of resp) {
         const index = this.dataSource.findIndex((source) => source.matchId == item.payload.doc.id)
         if (item.type == "added" && index == -1) {

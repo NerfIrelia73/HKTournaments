@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
@@ -25,23 +25,27 @@ export class MatchesComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @Input() adminInfo: adminInfo = null
+  @Input() tournaments: {name: string, uid: string}[] = null
+  selectedView = new FormControl("list")
+  selectedTournaments: string[] = []
   displayedColumns: string[] = ['Runners', 'Comms', 'Restreamer', 'Date', 'Locked']
   dataSource = []
   resetDataSource = []
   userList: User[] = []
   subscription: Subscription = null
+  adminTournaments: string[] = []
 
   ngOnInit(): void {
     this.userList = this.userService.getUserList()
-    this.subscription = this.afs.collection('tournaments/2cFP7NykXFZhEG06HpAL/matches').snapshotChanges().subscribe(async (resp) => {
+    this.subscription = this.afs.collectionGroup('matches').snapshotChanges().subscribe(async (resp) => {
       for (const item of resp) {
         const index = this.dataSource.findIndex((source) => source.matchId == item.payload.doc.id)
         if (item.type == "added" && index == -1) {
-          const dataEntry = await this.createDataEntry(item.payload.doc.data(), item.payload.doc.id)
+          const dataEntry = await this.createDataEntry(item.payload.doc.data(), item.payload.doc.id, item.payload.doc.ref.parent.parent.id)
           this.dataSource.push(dataEntry)
           this.resetDataSource.push(JSON.parse(JSON.stringify(dataEntry)))
         } else if (item.type == "modified" && index != -1) {
-          const dataEntry = await this.createDataEntry(item.payload.doc.data(), item.payload.doc.id)
+          const dataEntry = await this.createDataEntry(item.payload.doc.data(), item.payload.doc.id, item.payload.doc.ref.parent.parent.id)
           this.dataSource[index] = dataEntry
         }
       }
@@ -52,7 +56,33 @@ export class MatchesComponent implements OnInit {
     });
   }
 
-  async createDataEntry(data: any, id: string) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.tournaments != null && changes.tournaments.currentValue != null) {
+      this.selectedTournaments = changes.tournaments.currentValue.map(a => a.uid)
+    }
+    if (changes.adminInfo != null && changes.adminInfo.currentValue != null) {
+      this.adminTournaments = changes.adminInfo.currentValue.tournaments.filter(a => {
+        if (a.admin) {
+          return true
+        } else {
+          return false
+        }
+      }).map(a => a.tournamentId)
+    }
+    // You can also use categoryId.previousValue and
+    // categoryId.firstChange for comparing old and new values
+
+}
+
+  updateSelectedTournaments(event: any) {
+    if (event.checked) {
+      this.selectedTournaments.push(event.source.value)
+    } else {
+      this.selectedTournaments.splice(this.selectedTournaments.indexOf(event.source.value), 1)
+    }
+  }
+
+  async createDataEntry(data: any, id: string, tournament: string) {
     const d = data.date.toDate()
     const utcD = d.toUTCString();
     const runnersList = await this.getUsers(data.runners)
@@ -128,6 +158,7 @@ export class MatchesComponent implements OnInit {
       locked: data.locked,
       matchId: id,
       participantInfo: participantInfo,
+      tournament: tournament,
       commands: [runnerCommand, commsCommand]
     }
   }
@@ -154,24 +185,24 @@ export class MatchesComponent implements OnInit {
   }
 
   toggleConfirm(source: any) {
-    this.afs.doc(`tournaments/2cFP7NykXFZhEG06HpAL/matches/${source.matchId}`).update({
+    this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
       comms: source.commsForm.value,
       restreamer: source.restreamerForm.value,
       locked: !source.locked
     })
   }
 
-  resetMatch(matchId: string) {
-    const index = this.dataSource.findIndex((match) => match.matchId == matchId)
-    const indexCopy = this.resetDataSource.findIndex((match) => match.matchId == matchId)
+  resetMatch(source: any) {
+    const index = this.dataSource.findIndex((match) => match.matchId == source.matchId)
+    const indexCopy = this.resetDataSource.findIndex((match) => match.matchId == source.matchId)
     this.dataSource[index].commsForm.setValue(this.resetDataSource[indexCopy].commsForm.value)
     this.dataSource[index].adminComms = JSON.parse(JSON.stringify(this.resetDataSource[indexCopy].adminComms))
     this.dataSource[index].restreamerForm.setValue(this.resetDataSource[indexCopy].restreamerForm.value)
     this.dataSource[index].adminRestreamer = JSON.parse(JSON.stringify(this.resetDataSource[indexCopy].adminRestreamer))
   }
 
-  deleteMatch(matchId: string) {
-    this.afs.doc(`tournaments/2cFP7NykXFZhEG06HpAL/matches/${matchId}`).delete()
+  deleteMatch(source: any) {
+    this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).delete()
   }
 
   toggleSignUp(choice: string, source: any) {
@@ -183,7 +214,7 @@ export class MatchesComponent implements OnInit {
       } else {
         commsForm.push(this.adminInfo.uid)
       }
-      this.afs.doc(`tournaments/2cFP7NykXFZhEG06HpAL/matches/${source.matchId}`).update({
+      this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
         comms: commsForm,
       })
     } else if (choice == "restreamer") {
@@ -193,7 +224,7 @@ export class MatchesComponent implements OnInit {
       } else {
         restreamerForm.push(this.adminInfo.uid)
       }
-      this.afs.doc(`tournaments/2cFP7NykXFZhEG06HpAL/matches/${source.matchId}`).update({
+      this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
         restreamer: restreamerForm,
       })
     }

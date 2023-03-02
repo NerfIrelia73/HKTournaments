@@ -48,3 +48,25 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-icon-button.mat-purple {
   color:#5f135b;
 }
+
+
+.mat-button.mat-pink,
+.mat-stroked-button.mat-pink {
+    color: #ad0ba5;
+}
+.mat-button.mat-pink:hover,
+.mat-stroked-button.mat-pink:hover {
+  background-color: #f0fff3;
+}
+
+.mat-raised-button.mat-pink,
+.mat-flat-button.mat-pink,
+.mat-fab.mat-pink,
+.mat-mini-fab.mat-pink {
+  color: #f0fff3;
+  background-color: #ad0ba5;
+}
+
+.mat-icon-button.mat-pink {
+  color:#ad0ba5;
+}

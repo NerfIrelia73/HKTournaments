@@ -1,6 +1,5 @@
 export interface adminInfo {
-    admin: boolean;
-    superadmin: boolean;
     uid: string;
     displayName: string;
+    tournaments: {admin: string, superadmin: string, tournamnetId: string}[]
 }

@@ -1,0 +1,7 @@
+<div style="margin-left: 30px;">
+    <div *ngFor="let tournament of tournaments">
+        <button class="tournament-btn" mat-raised-button color="pink">{{ tournament.name }}</button>
+        <button *ngIf="joinedTournaments != null && !joinedTournaments.includes(tournament.uid)" class="sign-up-btn" mat-raised-button color="success" (click)="addToTournament(tournament.uid)">Sign Up</button>
+        <button *ngIf="joinedTournaments != null &&  joinedTournaments.includes(tournament.uid)" class="sign-up-btn" mat-raised-button color="success"><fa-icon [icon]="faCheck"></fa-icon></button>
+    </div>
+</div>

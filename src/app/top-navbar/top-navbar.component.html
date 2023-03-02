@@ -1,5 +1,9 @@
 <div class="nav">
-    <div *ngIf="displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center;">
+    <div *ngIf="displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: 2px;">
+        <button [ngClass]="{'purple': currentOption == 'schedule', 'nothing': currentOption != 'schedule'}" style="height: 100%; font-size: 17px;" mat-button color="accent" (click)="toggleButton('schedule')">Schedule</button>
+        <button [ngClass]="{'purple': currentOption == 'tournaments', 'nothing': currentOption != 'tournaments'}" style="height: 100%; font-size: 17px;" mat-button color="accent" (click)="toggleButton('tournaments')">Tournaments</button>
+    </div>
+    <div *ngIf="displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: auto;">
         <button style="height: 100%; font-size: 17px; margin-left: 20px;" mat-button color="accent">{{ displayName }}</button>
         <button style="height: 100%; font-size: 17px;" mat-button color="accent" (click)="authService.SignOut()">Sign Out</button>
     </div>

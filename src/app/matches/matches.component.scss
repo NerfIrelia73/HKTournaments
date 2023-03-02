@@ -11,3 +11,27 @@
     word-wrap: break-word;
     text-align: center;
 }
+
+.viewBtnContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.btnGroupContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.btnGroupContainer > mat-button-toggle {
+    width: 130px;
+}
+
+.mat-button-toggle {
+    background-color: rgb(2, 0, 131);
+    color: white;
+  }
+
+  .mat-button-toggle-checked {
+    background-color: rgb(72, 0, 139);
+    color: white;
+  }

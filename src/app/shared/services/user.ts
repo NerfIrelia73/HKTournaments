@@ -10,6 +10,7 @@ export interface User {
  }
 
  export interface Participant {
+    displayName: string;
     uid: string;
     admin: boolean;
     superadmin: boolean;

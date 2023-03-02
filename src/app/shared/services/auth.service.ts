@@ -128,16 +128,6 @@ export class AuthService {
       merge: true,
     });
 
-    const participationData = {
-      admin: false,
-      superadmin: false,
-      uid: user.uid
-    }
-
-    this.afs.collection("tournaments/2cFP7NykXFZhEG06HpAL/participants").add(
-      participationData
-    )
-
     return "User data set successfully"
   }
   // Sign out

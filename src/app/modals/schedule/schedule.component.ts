@@ -21,7 +21,6 @@ export class ScheduleComponent implements OnInit {
   subscription: Subscription = null
 
   ngOnInit(): void {
-    console.log("Getting matches")
     this.userList = this.userService.getUserList()
     this.subscription = this.afs.collection('tournaments/2cFP7NykXFZhEG06HpAL/matches').snapshotChanges().subscribe(async (resp) => {
       for (const item of resp) {

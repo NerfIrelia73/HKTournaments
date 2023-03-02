@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthService } from "../shared/services/auth.service";
-import { User } from '../shared/services/user';
 
 @Component({
   selector: 'app-top-navbar',
@@ -17,8 +16,17 @@ export class TopNavbarComponent implements OnInit {
   ) { }
 
   @Input() displayName: String = ""
+  currentOption = "schedule"
+  @Output() newOption = new EventEmitter<string>();
 
   ngOnInit(): void {
+  }
+
+  toggleButton(choice: string) {
+    if (this.currentOption != choice) {
+      this.currentOption = choice
+      this.newOption.emit(choice)
+    }
   }
 
 }

@@ -23,19 +23,19 @@
                         </div>
                         <div class="login__field">
                             <i class="login__icon"><fa-icon [icon]="faUser"></fa-icon></i>
-                            <input type="password" class="login__input" placeholder="Display Name" #userDisplayName required>
+                            <input type="text" class="login__input" placeholder="Display Name" #userDisplayName required>
                         </div>
                         <div class="login__field">
                             <i class="login__icon"><fa-icon [icon]="faHashtag"></fa-icon></i>
-                            <input type="password" class="login__input" placeholder="Discord Id (with #)" #userDiscordId required>
+                            <input type="text" class="login__input" placeholder="Discord Id (with #)" #userDiscordId required>
                         </div>
                         <div class="login__field">
                             <i class="login__icon"><fa-icon [icon]="faGamepad"></fa-icon></i>
-                            <input type="password" class="login__input" placeholder="Twitch Channel" #userTwitch required>
+                            <input type="text" class="login__input" placeholder="Twitch Channel" #userTwitch required>
                         </div>
                         <div class="login__field">
                             <i class="login__icon"><fa-icon [icon]="faVenusMars"></fa-icon></i>
-                            <input type="password" class="login__input" placeholder="Pronouns" #userPronouns required>
+                            <input type="text" class="login__input" placeholder="Pronouns" #userPronouns required>
                         </div>
                     </div>
                     <button type="button" (click)="authService.SignUp(userEmail.value, userPassword.value, userDisplayName.value, userDiscordId.value, userTwitch.value, userPronouns.value)" class="button login__submit">
@@ -44,7 +44,7 @@
                     </button>
                 </form>
                 <section class="another-action" style="text-align: center;" aria-label="ResetPassword">
-                    <strong><span class="button__text" style="color: #180bc9;">Already have an account? <a class="text-link" routerLink="/sign-in" style="color: black;">Log In</a></span></strong>
+                    <strong><span class="button__text" style="color: black;">Already have an account? <a class="text-link" routerLink="/sign-in" style="color: #180bc9;">Log In</a></span></strong>
                 </section>
             </div>
             <div class="screen__background">

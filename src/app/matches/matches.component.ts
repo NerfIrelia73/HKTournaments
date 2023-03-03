@@ -83,8 +83,7 @@ export class MatchesComponent implements OnInit {
   }
 
   async createDataEntry(data: any, id: string, tournament: string) {
-    const d = data.date.toDate()
-    const utcD = d.toUTCString();
+    const d = data.date.toDate().toString()
     const runnersList = await this.getUsers(data.runners)
     const commsList = await this.getUsers(data.comms)
     const restreamerList = await this.getUsers(data.restreamer)
@@ -154,7 +153,7 @@ export class MatchesComponent implements OnInit {
       runners: runners,
       comms: comms,
       restreamer: restreamer,
-      date: `${utcD.replace("GMT", "UTC")}`,
+      date: d.replace(d.substring(d.indexOf("GMT"), d.indexOf("GMT") + 8), ""),
       locked: data.locked,
       matchId: id,
       participantInfo: participantInfo,

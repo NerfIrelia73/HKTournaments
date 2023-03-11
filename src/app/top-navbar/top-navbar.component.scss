@@ -9,13 +9,30 @@
 .tabs {
     background: black;
     margin-right: 0;
-    height: 70px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
 }
 
 .purple {
     background-color: rgba(255, 0, 212, 0.192) !important;
+    text-align: center !important;
+    height: 100%;
 }
 
 .nothing {
     background-color: none !important;
+}
+
+@media only screen and (max-width: 460px) {
+    .nav {
+        height: 50px;
+    }
+
+    .tabs {
+        width: 48%;
+        align-items: center;
+        height: 100%;
+    }
+
 }

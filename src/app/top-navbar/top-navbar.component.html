@@ -1,14 +1,14 @@
 <div class="nav">
     <div *ngIf="displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: 2px;">
-        <button [ngClass]="{'purple': currentOption == 'schedule', 'nothing': currentOption != 'schedule'}" style="height: 100%; font-size: 17px;" mat-button color="accent" (click)="toggleButton('schedule')">Schedule</button>
-        <button [ngClass]="{'purple': currentOption == 'tournaments', 'nothing': currentOption != 'tournaments'}" style="height: 100%; font-size: 17px;" mat-button color="accent" (click)="toggleButton('tournaments')">Tournaments</button>
+        <button [ngClass]="{'purple': currentOption == 'schedule', 'nothing': currentOption != 'schedule'}" style="font-size: 17px;" mat-button color="accent" (click)="toggleButton('schedule')">Schedule</button>
+        <button [ngClass]="{'purple': currentOption == 'tournaments', 'nothing': currentOption != 'tournaments'}" style="font-size: 17px;" mat-button color="accent" (click)="toggleButton('tournaments')">Tournaments</button>
     </div>
     <div *ngIf="displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: auto;">
-        <button style="height: 100%; font-size: 17px; margin-left: 20px;" mat-button color="accent">{{ displayName }}</button>
-        <button style="height: 100%; font-size: 17px;" mat-button color="accent" (click)="authService.SignOut()">Sign Out</button>
+        <button style="font-size: 17px;" mat-button color="accent">{{ displayName }}</button>
+        <button style="font-size: 17px;" mat-button color="accent" (click)="authService.SignOut()">Sign Out</button>
     </div>
     <div *ngIf="displayName == ''" class="tabs">
-        <button style="height: 100%; width: 50%; font-size: 17px;" mat-button color="accent" [routerLink]="['sign-in']">Sign In</button>
-        <button style="height: 100%; width: 50%; font-size: 17px;" mat-button color="accent" [routerLink]="['sign-up']">Sign Up</button>
+        <button style="font-size: 17px;" mat-button color="accent" [routerLink]="['sign-in']">Sign In</button>
+        <button style="font-size: 17px;" mat-button color="accent" [routerLink]="['sign-up']">Sign Up</button>
     </div>
 </div>

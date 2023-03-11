@@ -14,7 +14,7 @@
             <mat-form-field appearance="fill">
                 <mat-label>Runners</mat-label>
                 <mat-select [formControl]="selectedParticipants" multiple>
-                <mat-option *ngFor="let participant of tournaments[tournamentIndex].participants" [value]="participant.displayName">{{ participant.displayName }}</mat-option>
+                    <mat-option *ngFor="let participant of tournaments[tournamentIndex].participants" [value]="participant.displayName">{{ participant.displayName }}</mat-option>
                 </mat-select>
             </mat-form-field>
             <br>

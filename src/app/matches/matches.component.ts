@@ -37,7 +37,7 @@ export class MatchesComponent implements OnInit {
 
   ngOnInit(): void {
     this.userList = this.userService.getUserList()
-    this.subscription = this.afs.collectionGroup('matches').snapshotChanges().subscribe(async (resp) => {
+    this.subscription = this.afs.collectionGroup('matches', ref => ref.orderBy('date')).snapshotChanges().subscribe(async (resp) => {
       for (const item of resp) {
         const index = this.dataSource.findIndex((source) => source.matchId == item.payload.doc.id)
         if (item.type == "added" && index == -1) {
@@ -98,7 +98,7 @@ export class MatchesComponent implements OnInit {
     let restreamer = ""
     if (runnersList.length > 0) {
       runners = `${runnersList[0].displayName}`
-      runnerCommand = `!editcom !runners ${runnersList[0].displayName}: ${runnersList[0].twitch}`
+      runnerCommand = `!editcom !r ${runnersList[0].displayName}: ${runnersList[0].twitch}`
       participantInfo.push(`${runnersList[0].displayName}: ${runnersList[0].discordId}, ${runnersList[0].pronouns}`)
       for (let i = 1; i < runnersList.length; i++) {
         runners += `, ${runnersList[i].displayName}`

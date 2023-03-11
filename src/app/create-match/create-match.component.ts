@@ -90,7 +90,7 @@ export class CreateMatchComponent implements OnInit {
       }
     });
 
-    this.afs.collection('users').get().forEach(
+    this.afs.collection('users', ref => ref.orderBy('displayName')).get().forEach(
       (val) => {
         this.participantList = []
         for (const item of val.docs) {
@@ -103,10 +103,13 @@ export class CreateMatchComponent implements OnInit {
                 return user.uid == (item.data() as any).uid
               })
               const index = this.tournaments.findIndex(tournament => tournament.uid == item.ref.parent.parent.id)
-              if (item.ref.parent.parent.id == "CVCUTJbiES3dvFmZVWNV") {
-              }
               if (!this.tournaments[index].participants.includes(user[0]))
               this.tournaments[index].participants.push(user[0])
+            }
+            for (const tournament of this.tournaments) {
+              tournament.participants = tournament.participants.sort((a, b) => {
+                return a.displayName.localeCompare(b.displayName)
+              })
             }
           }
         );

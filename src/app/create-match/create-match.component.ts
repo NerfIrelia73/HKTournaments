@@ -134,7 +134,8 @@ export class CreateMatchComponent implements OnInit {
         date: d,
         restreamer: [],
         runners: finalRunners,
-        locked: false
+        locked: false,
+        onHKC: false
       }).then(() => {
         this.router.navigate([''])
       })

@@ -1,13 +1,13 @@
 <div class="nav">
-    <div *ngIf="displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: 2px;">
+    <div *ngIf="userInfo != null && userInfo.displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: 2px;">
         <button [ngClass]="{'purple': currentOption == 'schedule', 'nothing': currentOption != 'schedule'}" style="font-size: 17px;" mat-button color="accent" (click)="toggleButton('schedule')">Schedule</button>
         <button [ngClass]="{'purple': currentOption == 'tournaments', 'nothing': currentOption != 'tournaments'}" style="font-size: 17px;" mat-button color="accent" (click)="toggleButton('tournaments')">Tournaments</button>
     </div>
-    <div *ngIf="displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: auto;">
-        <button style="font-size: 17px;" mat-button color="accent">{{ displayName }}</button>
+    <div *ngIf="userInfo != null && userInfo.displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: auto;">
+        <button style="font-size: 17px;" mat-button color="accent" (click)="displayUserInfo()">{{ userInfo.displayName }}</button>
         <button style="font-size: 17px;" mat-button color="accent" (click)="authService.SignOut()">Sign Out</button>
     </div>
-    <div *ngIf="displayName == ''" class="tabs">
+    <div *ngIf="userInfo != null && userInfo.displayName == ''" class="tabs">
         <button style="font-size: 17px;" mat-button color="accent" [routerLink]="['sign-in']">Sign In</button>
         <button style="font-size: 17px;" mat-button color="accent" [routerLink]="['sign-up']">Sign Up</button>
     </div>

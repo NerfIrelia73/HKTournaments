@@ -1,0 +1,30 @@
+<div class="modal-header bg-info" style="border-bottom: none;">
+    <h4 class="modal-title" style="text-align: center;">Profile Settings</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body bg-info">
+    <div style="width: 80%; margin: auto;">
+        <div style="width: 100%; margin-bottom: 10px;">
+            <div class="labelDiv">Discord ID: </div>
+            <input style="width: 50%;" placeholder="Discord ID" [formControl]="discordId">
+        </div>
+        <div style="width: 100; margin-bottom: 10px;">
+            <div class="labelDiv">Display Name: </div>
+            <input style="width: 50%;" placeholder="Display Name" value="{{userInfo.displayName}}" [formControl]="displayName">
+        </div>
+        <div style="width: 100; margin-bottom: 10px;">
+            <div class="labelDiv">Twitch: </div>
+            <input style="width: 50%;" placeholder="Twitch" value="{{userInfo.twitch}}" [formControl]="twitch">
+        </div>
+        <div style="width: 100; margin-bottom: 10px;">
+            <div class="labelDiv">Pronouns: </div>
+            <input style="width: 50%;" placeholder="Pronouns" value="{{userInfo.pronouns}}" [formControl]="pronouns">
+        </div>
+    </div>
+    <div>
+        <button style="margin-top: 10px; height: 50%; margin-top: 32px; margin-left: 15px;" mat-raised-button color="warn" (click)="activeModal.dismiss('Cross click')">Cancel</button>
+        <button style="margin-top: 10px; height: 50%; margin-top: 32px; margin-left: 15px;" mat-raised-button color="success" (click)="setUserData()">Save</button>
+    </div>
+</div>

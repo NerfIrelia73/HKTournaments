@@ -29,7 +29,8 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { MatchesComponent } from './matches/matches.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { ScheduleComponent } from './modals/schedule/schedule.component';
-import { TournamentSignUpComponent } from './tournament-sign-up/tournament-sign-up.component'
+import { TournamentSignUpComponent } from './tournament-sign-up/tournament-sign-up.component';
+import { UserInfoComponent } from './modals/user-info/user-info.component'
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { TournamentSignUpComponent } from './tournament-sign-up/tournament-sign-
     MatchesComponent,
     CreateMatchComponent,
     ScheduleComponent,
-    TournamentSignUpComponent
+    TournamentSignUpComponent,
+    UserInfoComponent
   ],
   imports: [
     BrowserModule,

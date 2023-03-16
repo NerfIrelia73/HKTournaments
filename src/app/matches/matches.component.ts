@@ -98,7 +98,7 @@ export class MatchesComponent implements OnInit {
     let restreamer = ""
     if (runnersList.length > 0) {
       runners = `${runnersList[0].displayName}`
-      runnerCommand = `!editcom !r ${runnersList[0].displayName}: ${runnersList[0].twitch}`
+      runnerCommand = `!setrunners ${runnersList[0].displayName}: ${runnersList[0].twitch}`
       participantInfo.push(`${runnersList[0].displayName}: ${runnersList[0].discordId}, ${runnersList[0].pronouns}`)
       for (let i = 1; i < runnersList.length; i++) {
         runners += `, ${runnersList[i].displayName}`
@@ -112,7 +112,7 @@ export class MatchesComponent implements OnInit {
         id: commsList[0].uid
       })
       comms = `${commsList[0].displayName}`
-      commsCommand = `!editcom !comms ${commsList[0].displayName}: ${commsList[0].twitch}`
+      commsCommand = `!setcomms ${commsList[0].displayName}: ${commsList[0].twitch}`
       participantInfo.push(`${commsList[0].displayName}: ${commsList[0].discordId}, ${commsList[0].pronouns}`)
       for (let i = 1; i < commsList.length; i++) {
         adminComms.push({
@@ -158,6 +158,7 @@ export class MatchesComponent implements OnInit {
       matchId: id,
       participantInfo: participantInfo,
       tournament: tournament,
+      onHKC: data.onHKC,
       commands: [runnerCommand, commsCommand]
     }
   }
@@ -227,5 +228,11 @@ export class MatchesComponent implements OnInit {
         restreamer: restreamerForm,
       })
     }
+  }
+
+  toggleHKC(source: any) {
+    this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
+      onHKC: !source.onHKC,
+    })
   }
 }

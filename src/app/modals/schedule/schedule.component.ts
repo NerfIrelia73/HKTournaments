@@ -23,7 +23,7 @@ export class ScheduleComponent implements OnInit {
   ngOnInit(): void {
 
     this.userList = this.userService.getUserList()
-    this.subscription = this.afs.collectionGroup('matches').snapshotChanges().subscribe(async (resp) => {
+    this.subscription = this.afs.collectionGroup('matches', ref => ref.orderBy('date')).snapshotChanges().subscribe(async (resp) => {
       for (const item of resp) {
         const index = this.dataSource.findIndex((source) => source.matchId == item.payload.doc.id)
         if (item.type == "added" && index == -1) {

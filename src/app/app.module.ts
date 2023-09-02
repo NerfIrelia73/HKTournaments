@@ -30,7 +30,11 @@ import { MatchesComponent } from './matches/matches.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { ScheduleComponent } from './modals/schedule/schedule.component';
 import { TournamentSignUpComponent } from './tournament-sign-up/tournament-sign-up.component';
-import { UserInfoComponent } from './modals/user-info/user-info.component'
+import { UserInfoComponent } from './modals/user-info/user-info.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarMatchComponent } from './modals/calendar-match/calendar-match.component'
 
 @NgModule({
   declarations: [
@@ -45,7 +49,9 @@ import { UserInfoComponent } from './modals/user-info/user-info.component'
     CreateMatchComponent,
     ScheduleComponent,
     TournamentSignUpComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    CalendarComponent,
+    CalendarMatchComponent
   ],
   imports: [
     BrowserModule,
@@ -70,6 +76,7 @@ import { UserInfoComponent } from './modals/user-info/user-info.component'
       { path: 'verify-email-address', component: VerifyEmailComponent },
       { path: 'create-match', component: CreateMatchComponent}
     ]),
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
   ],
   providers: [AuthService, UserListService],
   bootstrap: [AppComponent],

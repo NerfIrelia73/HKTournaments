@@ -83,7 +83,9 @@ export class MatchesComponent implements OnInit {
   }
 
   async createDataEntry(data: any, id: string, tournament: string) {
-    const d = data.date.toDate().toString()
+    const d = data.date.toDate()
+    const timestamp = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), 0)
+    const timeString = "<t:" + timestamp.getTime().toString().substring(0, timestamp.getTime().toString().length - 3) + ":F>"
     const runnersList = await this.getUsers(data.runners)
     const commsList = await this.getUsers(data.comms)
     const restreamerList = await this.getUsers(data.restreamer)
@@ -91,6 +93,7 @@ export class MatchesComponent implements OnInit {
     const participantInfo = []
     const adminComms = []
     const adminRestreamer = []
+    const runnerIds = runnersList.map(a => a.uid)
     let runners = ""
     let runnerCommand = ""
     let comms = ""
@@ -145,20 +148,31 @@ export class MatchesComponent implements OnInit {
     selectedComms.setValue(adminComms.map(a => a.id))
     const selectedRestreamer = new FormControl('')
     selectedRestreamer.setValue(adminRestreamer.map(a => a.id))
+    const matchTitle = new FormControl('')
+    matchTitle.setValue(data.title)
     return {
+      title: runners,
+      color: {
+        primary: '#1e90ff',
+        secondary: '#D1E8FF',
+      },
+      start: data.date.toDate(),
       commsForm: selectedComms,
       restreamerForm: selectedRestreamer,
       adminComms: adminComms,
       adminRestreamer: adminRestreamer,
+      runnerIds: runnerIds,
       runners: runners,
       comms: comms,
       restreamer: restreamer,
-      date: d.replace(d.substring(d.indexOf("GMT"), d.indexOf("GMT") + 8), ""),
+      date: d.toString().replace(d.toString().substring(d.toString().indexOf("GMT"), d.toString().indexOf("GMT") + 8), ""),
+      timestamp: timeString,
       locked: data.locked,
       matchId: id,
       participantInfo: participantInfo,
       tournament: tournament,
       onHKC: data.onHKC,
+      matchTitle: matchTitle,
       commands: [runnerCommand, commsCommand]
     }
   }
@@ -230,9 +244,31 @@ export class MatchesComponent implements OnInit {
     }
   }
 
+  saveMatchTitle(source: any) {
+    this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
+      title: source.matchTitle.value,
+    })
+  }
+
   toggleHKC(source: any) {
     this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
       onHKC: !source.onHKC,
     })
+  }
+
+  updateMatch(data: any) {
+    console.log("updating match")
+    console.log(data)
+    if (data.option == 'confirm') {
+      this.toggleConfirm(data.source)
+    } else if (data.option == 'delete') {
+      this.deleteMatch(data.source)
+    } else if (data.option == 'reset') {
+      this.resetMatch(data.source)
+    } else if (data.option == 'HKC') {
+      this.toggleHKC(data.source)
+    } else if (data.option == 'SignUp') {
+      this.toggleSignUp(data.choice, data.source)
+    }
   }
 }

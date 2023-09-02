@@ -1,11 +1,9 @@
-<!--
 <div class="viewBtnContainer" style="margin-top: -30px; margin-bottom: 15px;">
     <mat-button-toggle-group class="btnGroupContainer" name="fontStyle" aria-label="Font Style" [formControl]="selectedView">
         <mat-button-toggle value="list">List View</mat-button-toggle>
         <mat-button-toggle value="calendar">Calendar View</mat-button-toggle>
     </mat-button-toggle-group>
 </div>
--->
 <div class="viewBtnContainer">
     <section style="color: white;">
         <p style="color: white; display: flex; justify-content: center;">Tournament Select:</p>
@@ -15,7 +13,7 @@
 <div style="display: flex; flex-direction: row; justify-content: left;">
     <button routerLink="/create-match" style="background-color: white; margin-left: 32px; margin-bottom: 10px;" mat-button color="basic">Create a Match</button>
 </div>
-<div class="example-action-buttons" style="margin-left: 20px; color: white;">
+<div *ngIf="selectedView.value == 'list'" class="example-action-buttons" style="margin-left: 20px; color: white;">
     <button mat-button (click)="accordion.openAll()">Expand All</button>
     <button mat-button (click)="accordion.closeAll()">Collapse All</button>
 </div>
@@ -71,12 +69,21 @@
                 </div>
                 <div class="panelBox" style="text-align: left;">
                     <span *ngFor="let command of source.commands" style="display: block; margin-bottom: 4px;">{{ command }}</span><br>
+                    <span style="display: block; margin-bottom: 4px;">Discord Timestamp: {{ source.timestamp }}</span><br>
                 </div>
+            </div>
+            <div class="panelContainer" *ngIf="adminInfo != null && adminTournaments.includes(source.tournament) && selectedTournaments.includes(source.tournament)">
+                <span style="font-size: 18px; margin-right: 15px; margin-top: 8px;"><strong>Match Title: </strong></span>
+                <input type="text" class="login__input" [formControl]="source.matchTitle">
+                <button (click)="saveMatchTitle(source)" style="height: 50%;margin-left: 15px;" mat-raised-button color="success">Save</button>
             </div>
         </mat-expansion-panel>
         <button (click)="toggleConfirm(source)" style="margin-top: 10px; height: 50%; margin-top: 32px; margin-left: 15px;" mat-raised-button color="success" *ngIf="adminInfo != null && adminTournaments.includes(source.tournament) && selectedTournaments.includes(source.tournament)">{{ source.locked ? 'Unconfirm Match' : 'Confirm Match' }}</button>
-        <button (click)="deleteMatch(source)" style="margin-top: 10px; height: 50%; margin-top: 32px; margin-left: 15px;" mat-raised-button color="warn" *ngIf="adminInfo != null && adminTournaments.includes(source.tournament) && selectedTournaments.includes(source.tournament)" [disabled]="source.locked">Delete Match</button>
+        <button (click)="deleteMatch(source)" style="margin-top: 10px; height: 50%; margin-top: 32px; margin-left: 15px;" mat-raised-button color="warn" *ngIf="adminInfo != null && ((adminTournaments.includes(source.tournament) && selectedTournaments.includes(source.tournament)) || source.runnerIds.includes(adminInfo.uid))" [disabled]="source.locked">Delete Match</button>
         <button (click)="resetMatch(source)" style="margin-top: 10px; height: 50%; margin-top: 32px; margin-left: 15px;" mat-raised-button color="primary" *ngIf="adminInfo != null && adminTournaments.includes(source.tournament) && selectedTournaments.includes(source.tournament)" [disabled]="source.locked">Undo Changes</button>
         <button (click)="toggleHKC(source)" style="margin-top: 10px; height: 50%; margin-top: 32px; margin-left: 15px;" mat-raised-button [color]="source.onHKC ? 'success' : 'warn'" *ngIf="adminInfo != null && adminTournaments.includes(source.tournament) && selectedTournaments.includes(source.tournament)">{{ source.onHKC ? 'On Calendar' : 'Not on Calendar'}}</button>
     </div>
 </mat-accordion>
+<div *ngIf="selectedView.value == 'calendar'" style="width: 90%; margin: auto; padding-bottom: 60px;">
+    <calendar [events]="dataSource" [resetDataSource]="resetDataSource" [selectedTournaments]="selectedTournaments" [adminInfo]="adminInfo" [adminTournaments]="adminTournaments" (updateMatch)="updateMatch($event)"></calendar>
+</div>

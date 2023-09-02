@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
 import { Participant, User } from '../shared/services/user';
 import { NavigationEnd, Router } from '@angular/router';
@@ -20,11 +20,11 @@ export class CreateMatchComponent implements OnInit {
   runnerList: Participant[] = []
   tournaments: {name: string, uid: string, participants: User[]}[] = []
   tournamentIndex = -1
-  selectedTournament = new FormControl('')
+  selectedTournament = new UntypedFormControl('')
   participantList: User[] = []
-  selectedParticipants = new FormControl('')
-  selectedTime = new FormControl('')
-  selectedDate = new FormControl(Date)
+  selectedParticipants = new UntypedFormControl('')
+  selectedTime = new UntypedFormControl('')
+  selectedDate = new UntypedFormControl(Date)
   loading = false
 
   availableTimes: {time: string, value: string}[] = [

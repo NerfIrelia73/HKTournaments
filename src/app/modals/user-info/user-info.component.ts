@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/shared/services/user';
 
@@ -14,10 +14,10 @@ export class UserInfoComponent implements OnInit {
   constructor(public afs: AngularFirestore, public activeModal: NgbActiveModal) { }
 
   @Input() public userInfo: User
-  displayName = new FormControl('')
-  discordId = new FormControl('')
-  twitch = new FormControl('')
-  pronouns = new FormControl('')
+  displayName = new UntypedFormControl('')
+  discordId = new UntypedFormControl('')
+  twitch = new UntypedFormControl('')
+  pronouns = new UntypedFormControl('')
 
   ngOnInit(): void {
     this.displayName.setValue(this.userInfo.displayName)

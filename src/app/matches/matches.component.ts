@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -26,7 +26,7 @@ export class MatchesComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @Input() adminInfo: adminInfo = null
   @Input() tournaments: {name: string, uid: string}[] = null
-  selectedView = new FormControl("list")
+  selectedView = new UntypedFormControl("list")
   selectedTournaments: string[] = []
   displayedColumns: string[] = ['Runners', 'Comms', 'Restreamer', 'Date', 'Locked']
   dataSource = []
@@ -144,11 +144,11 @@ export class MatchesComponent implements OnInit {
       }
     }
 
-    const selectedComms = new FormControl('')
+    const selectedComms = new UntypedFormControl('')
     selectedComms.setValue(adminComms.map(a => a.id))
-    const selectedRestreamer = new FormControl('')
+    const selectedRestreamer = new UntypedFormControl('')
     selectedRestreamer.setValue(adminRestreamer.map(a => a.id))
-    const matchTitle = new FormControl('')
+    const matchTitle = new UntypedFormControl('')
     matchTitle.setValue(data.title)
     return {
       title: runners,

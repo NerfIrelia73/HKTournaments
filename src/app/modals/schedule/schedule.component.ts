@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/shared/services/user';
@@ -77,8 +77,8 @@ export class ScheduleComponent implements OnInit {
       }
     }
 
-    const selectedComms = new FormControl('')
-    const selectedRestreamer = new FormControl('')
+    const selectedComms = new UntypedFormControl('')
+    const selectedRestreamer = new UntypedFormControl('')
     return {
       commsForm: selectedComms,
       restreamerForm: selectedRestreamer,

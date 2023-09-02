@@ -74,7 +74,8 @@ import { CalendarMatchComponent } from './modals/calendar-match/calendar-match.c
       { path: 'sign-up', component: SignUpComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'verify-email-address', component: VerifyEmailComponent },
-      { path: 'create-match', component: CreateMatchComponent}
+      { path: 'create-match', component: CreateMatchComponent},
+      { path: 'tournaments', component: TournamentSignUpComponent}
     ]),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
   ],

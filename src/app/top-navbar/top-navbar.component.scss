@@ -1,17 +1,33 @@
 .nav {
     width: 100%;
-    height: 72px;
-    margin-bottom: 80px;
-    border-bottom: 2px solid purple;
+    height: auto;
+    border-bottom: 2.5px solid purple;
     background: black;
+    color: rgb(207, 48, 207);
+    display: flex;
+    align-items: center;
+}
+
+.discordBtn {
+    max-height: 80px;
+    max-width: 80px;
+    z-index: 100;
+    width: 6vw;
+    height: auto;
 }
 
 .tabs {
-    background: black;
-    margin-right: 0;
+    background: none;
     display: flex;
-    justify-content: center;
-    text-align: center;
+    justify-content: right;
+    margin-right: auto;
+    width: 50%;
+}
+
+.tabs > button {
+    color: rgb(207, 48, 207);
+    margin-right: 15px;
+    font-size: 2.3vh;
 }
 
 .purple {
@@ -24,15 +40,45 @@
     background-color: none !important;
 }
 
-@media only screen and (max-width: 460px) {
-    .nav {
-        height: 50px;
-    }
+.title {
+    font-size: 2.8vw;
+    margin-right: 2vh;
+    cursor: pointer;
+}
 
-    .tabs {
-        width: 48%;
-        align-items: center;
-        height: 100%;
-    }
+.toggleTabs {
+    background: black;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+}
 
+.toggleTabs > button {
+    color: rgb(207, 48, 207);
+    font-size: 2.3vh;
+}
+
+.icon-bar {
+    width: 22px;
+    height: 2px;
+    background: rgb(207, 48, 207);
+    margin: 3px;
+    position: relative;
+}
+
+.purpleTab {
+    border-bottom: 2px solid rgb(207, 48, 207);
+}
+
+.none {
+    border-bottom: none;
+}
+
+@media only screen and (max-width: 920px) {
+    .title {
+        font-size: 4.5vw;
+    }
 }

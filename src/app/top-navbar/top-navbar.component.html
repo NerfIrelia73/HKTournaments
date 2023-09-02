@@ -1,3 +1,4 @@
+<!--
 <div class="nav">
     <div *ngIf="userInfo != null && userInfo.displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: 2px;">
         <button [ngClass]="{'purple': currentOption == 'schedule', 'nothing': currentOption != 'schedule'}" style="font-size: 17px;" mat-button color="accent" (click)="toggleButton('schedule')">Schedule</button>
@@ -10,5 +11,30 @@
     <div *ngIf="userInfo != null && userInfo.displayName == ''" class="tabs">
         <button style="font-size: 17px;" mat-button color="accent" [routerLink]="['sign-in']">Sign In</button>
         <button style="font-size: 17px;" mat-button color="accent" [routerLink]="['sign-up']">Sign Up</button>
+    </div>
+</div>
+-->
+<div id="topNav" class="nav" [@navBar]="!navToggle ? 'borderVisible' : 'borderHidden'">
+    <div style="width: 50%; padding: 2.5vh;">
+        <span class="title" [routerLink]="['']" (click)="toggleNav('title')"><strong>HK Tournaments</strong></span>
+    </div>
+    <div *ngIf="screenWidth >= 920" class="tabs">
+        <button mat-button color="accent" [ngClass]="navTab == '/' ? 'purpleTab' : 'none'" [routerLink]="['']">Matches</button>
+        <button mat-button color="accent" [ngClass]="navTab == '/tournaments' ? 'purpleTab' : 'none'" [routerLink]="['tournaments']">Tournaments</button>
+        <button mat-button color="accent" [ngClass]="navTab == '/profile' ? 'purpleTab' : 'none'" [routerLink]="['profile']">Profile</button>
+    </div>
+    <div *ngIf="screenWidth < 920" class="tabs" style="caret-color: transparent;">
+        <div style="margin: auto; flex-direction: column; margin-right: 3vw;" (click)="toggleNav('none')">
+            <div class="icon-bar" [@hamburgerX]="!navToggle ? 'hamburger' : 'topX'"></div>
+            <div class="icon-bar" [@hamburgerX]="!navToggle ? 'hamburger' : 'hide'"></div>
+            <div class="icon-bar" [@hamburgerX]="!navToggle ? 'hamburger' : 'bottomX'"></div>
+        </div>
+    </div>
+</div>
+<div class="nav" [@navBar]="navToggle ? 'navMenuVisible' : 'navMenuHidden'" style="position: absolute; z-index: 100; opacity: 0; pointer-events: none;">
+    <div class="toggleTabs">
+        <button mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['']">Matches</button>
+        <button mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['tournaments']">Tournaments</button>
+        <button mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['profile']">Profile</button>
     </div>
 </div>

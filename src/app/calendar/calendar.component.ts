@@ -4,14 +4,14 @@ import {
   isSameMonth
 } from 'date-fns';
 import { Subject } from 'rxjs';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
   CalendarEventTimesChangedEvent,
   CalendarView,
 } from 'angular-calendar';
 import { CalendarMatchComponent } from '../modals/calendar-match/calendar-match.component';
-import { adminInfo } from '../home-page/participant';
+import { adminInfo } from '../matches/participant';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'calendar',
@@ -20,40 +20,17 @@ import { adminInfo } from '../home-page/participant';
 })
 export class CalendarComponent implements OnInit {
 
-  constructor(public modalService: NgbModal) { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log("Changes on calendar")
-    console.log(changes)
-    if (changes.events != null && this.modalRef != null) {
-      console.log(this.modalRef.componentInstance.source.matchId)
-      const index = changes.events.currentValue.findIndex(item => {
-        return(item.matchId == this.modalRef.componentInstance.source.matchId)
-      })
-      console.log(index)
-      if(index != -1)
-      this.modalRef.componentInstance.source = changes.events.currentValue[index]
-      this.modalRef.componentInstance.dataSource = changes.events.currentValue[index]
-    }
   }
 
-  @Input() events = []
-  @Input() resetDataSource: any
-  @Input() adminInfo: adminInfo = null
-  @Input() adminTournaments: string[] = []
-  @Input() selectedTournaments: any
-  @Output() updateMatch = new EventEmitter<{
-    source: any,
-    choice: string,
-    option: string
-  }>();
+  @Input() events: any = []
 
-  modalRef: NgbModalRef = null
-
-  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
+  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any> | undefined;
 
   view: CalendarView = CalendarView.Month;
 
@@ -64,7 +41,7 @@ export class CalendarComponent implements OnInit {
   modalData: {
     action: string;
     event: CalendarEvent;
-  };
+  } | undefined;
 
   refresh = new Subject<void>();
 
@@ -89,7 +66,7 @@ export class CalendarComponent implements OnInit {
     newStart,
     newEnd,
   }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map((iEvent) => {
+    this.events = this.events.map((iEvent: CalendarEvent<any>) => {
       if (iEvent === event) {
         return {
           ...event,
@@ -103,23 +80,15 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEvent(action: string, event: any): void {
-    console.log(event)
-    this.modalRef = this.modalService.open(CalendarMatchComponent, {
-      size: 'xl',
-      centered: true,
-      windowClass: 'dark-modal'
+    this.dialog.open(CalendarMatchComponent, {
+      panelClass: 'custom-dialog-container',
+      data: {
+        matchId: event.matchId
+      },
+      position: {
+        top: '9%'
+      },
     });
-    this.modalRef.componentInstance.source = event
-    this.modalRef.componentInstance.dataSource = event
-    this.modalRef.componentInstance.resetDataSource = this.resetDataSource
-    this.modalRef.componentInstance.adminInfo = this.adminInfo
-    this.modalRef.componentInstance.adminTournaments = this.adminTournaments
-    this.modalRef.componentInstance.selectedTournaments = this.selectedTournaments
-    this.modalRef.componentInstance.updateCalendar.subscribe((data) => {
-      console.log("We received the data")
-      console.log(data);
-      this.updateMatch.emit(data)
-      })
   }
 
   setView(view: CalendarView) {

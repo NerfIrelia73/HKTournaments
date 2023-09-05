@@ -102,7 +102,7 @@ export class CreateMatchComponent implements OnInit {
               const user = this.participantList.filter(user => {
                 return user.uid == (item.data() as any).uid
               })
-              const index = this.tournaments.findIndex(tournament => tournament.uid == item.ref.parent.parent.id)
+              const index = this.tournaments.findIndex(tournament => tournament.uid == item.ref.parent.parent?.id)
               if (!this.tournaments[index].participants.includes(user[0]))
               this.tournaments[index].participants.push(user[0])
             }

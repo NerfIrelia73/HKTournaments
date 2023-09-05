@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserListService } from 'src/app/user-list.service';
 
 @Component({
@@ -11,18 +11,11 @@ import { UserListService } from 'src/app/user-list.service';
 })
 export class CalendarMatchComponent implements OnInit {
 
-  constructor(public activeModal: NgbActiveModal, public afs: AngularFirestore, public router: Router, public userService: UserListService) { }
-
-  @Input() public source: any
-  @Input() public dataSource: any
-  @Input() public resetDataSource: any
-  @Input() public adminInfo: any
-  @Input() public adminTournaments: any
-  @Input() public selectedTournaments: any
+  constructor(public afs: AngularFirestore, public router: Router, public userService: UserListService, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   @Output() updateCalendar = new EventEmitter<{
     source: any,
-    choice: string,
+    choice: string | null,
     option: string
   }>();
 
@@ -30,11 +23,9 @@ export class CalendarMatchComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log("Changes in modal")
-    console.log(changes)
   }
 
-  sendToCalendar(source: any, choice: string, option: string) {
+  sendToCalendar(source: any, choice: string | null, option: string) {
     const data = {
       source: source,
       choice: choice,

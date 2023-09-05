@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { animate, animateChild, group, query, state, style, transition, trigger } from '@angular/animations';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserInfoComponent } from '../modals/user-info/user-info.component';
 import { AuthService } from "../shared/services/auth.service";
 import { User } from '../shared/services/user';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-top-navbar',
@@ -68,17 +68,23 @@ import { User } from '../shared/services/user';
         animate('0.25s'), // controls animation speed
       ]),
     ])
-  ],
-  encapsulation: ViewEncapsulation.None
+  ]
 })
 export class TopNavbarComponent implements OnInit {
 
-  constructor(
-    public authService: AuthService,
-    public afs: AngularFirestore, public modalService: NgbModal
-  ) { }
+  constructor(public authService: AuthService, public afs: AngularFirestore, public router: Router) {
+    this.router.events.pipe(filter((event: any) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+      this.navTab = event.url.split("#")[0]
+      if (this.navTab == '/sign-up' || this.navTab == '/sign-in' || this.navTab == '/forgot-password') {
+        this.displayNav = false
+      } else {
+        this.displayNav = true
+      }
+    });
+  }
 
-  @Input() userInfo: User
+  @Input() userInfo: User | undefined
+  displayNav = false
   currentOption = ""
   screenWidth = window.innerWidth
   navToggle = false
@@ -88,20 +94,16 @@ export class TopNavbarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    this.screenWidth = window.innerWidth;
+  }
+
   toggleButton(choice: string) {
     if (this.currentOption != choice) {
       this.currentOption = choice
       this.newOption.emit(choice)
     }
-  }
-
-  displayUserInfo() {
-    const modalRef = this.modalService.open(UserInfoComponent, {
-      size: 'm',
-      centered: true,
-      windowClass: 'dark-modal'
-    });
-    modalRef.componentInstance.userInfo = this.userInfo
   }
 
   toggleNav(choice: string) {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../shared/services/auth.service";
 import { faEnvelope, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { ScheduleComponent } from '../modals/schedule/schedule.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-forgot-password',
@@ -11,7 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ForgotPasswordComponent implements OnInit {
   constructor(
-    public authService: AuthService, private modalService: NgbModal
+    public authService: AuthService, public dialog: MatDialog
   ) { }
 
   faEnvelope = faEnvelope
@@ -21,10 +21,11 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   openSchedule() {
-    this.modalService.open(ScheduleComponent, {
-      size: 'xl',
-      centered: true,
-      windowClass: 'dark-modal'
+    this.dialog.open(ScheduleComponent, {
+      panelClass: 'custom-dialog-container',
+      position: {
+        top: '9%'
+      },
     });
   }
 }

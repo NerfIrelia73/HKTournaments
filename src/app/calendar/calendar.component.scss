@@ -1,0 +1,35 @@
+.buttonsContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.topButtons {
+    display: flex;
+    justify-content: center;
+}
+
+.mat-success {
+    background-color: #155724 !important;
+    color: white;
+}
+
+.mat-middle {
+    background-color: #4d488b !important;
+    color: white;
+}
+
+.mat-picked {
+    background-color: #3b31cc !important;
+    color: white;
+}
+
+.highlight {
+    background-color: #2a2392 !important;
+}
+
+@media only screen and (max-width: 810px) {
+    .buttonsContainer {
+        flex-direction: column;
+    }
+}

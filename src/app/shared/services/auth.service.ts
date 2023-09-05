@@ -7,7 +7,8 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
+import { adminInfo } from 'src/app/matches/participant';
 @Injectable({
   providedIn: 'root',
 })
@@ -23,14 +24,70 @@ export class AuthService {
   }
 
   currentUser: any = null
+  userInfo: User[] = []
+  userSub: Subscription | undefined
+  tournamentSub: Subscription | undefined
+  private userInfoSub = new BehaviorSubject(this.userInfo[0])
+  usersInfo = this.userInfoSub.asObservable();
+  private adminInfoSub = new BehaviorSubject({uid: "", displayName: "", tournaments: []} as adminInfo)
+  adminInfo = this.adminInfoSub.asObservable();
+  private tournamentsSub = new BehaviorSubject([] as {name: string, uid: string, details: string}[])
+  tournaments = this.tournamentsSub.asObservable();
   private authStatusSub = new BehaviorSubject(this.currentUser);
   currentAuthStatus = this.authStatusSub.asObservable();
 
+  ngOnInit(): void {
+  }
+
+  makeData(id: string) {
+    this.userSub = this.afs.collection('users', ref => ref.where('uid', '==', id)).valueChanges().subscribe(
+      val => {
+        this.userInfo = val as User[]
+        this.userInfoSub.next(this.userInfo[0])
+        try {
+          this.afs.collectionGroup('participants', ref => ref.where('uid', '==', this.userInfo[0].uid)).snapshotChanges().subscribe(
+            info => {
+              let tournaments: {admin: string, superadmin: string, tournamentId: string}[] = []
+              for (const item of info) {
+                tournaments.push({
+                  admin: (item.payload.doc.data() as any).admin as string,
+                  superadmin: (item.payload.doc.data() as any).superadmin as string,
+                  tournamentId: item.payload.doc.ref.parent.parent?.id as string
+                })
+              }
+              const adminInfo = {
+                displayName: this.userInfo[0].displayName,
+                uid: this.userInfo[0].uid,
+                tournaments: tournaments
+              }
+              this.adminInfoSub.next(adminInfo)
+            }
+          );
+        } catch(e) {
+          //console.log(e);
+        }
+      }
+    );
+
+  this.tournamentSub = this.afs.collection('tournaments').snapshotChanges().subscribe(async (resp) => {
+    const tournaments = []
+    for (const item of resp) {
+      tournaments.push({
+        name: (item.payload.doc.data() as any).name,
+        uid: item.payload.doc.id,
+        details: (item.payload.doc.data() as any).description
+      })
+    }
+
+    this.tournamentsSub.next(tournaments)
+  });
+  }
 
   authStatusListener(){
     this.afAuth.onAuthStateChanged((credential)=>{
       if(credential){
         this.authStatusSub.next(credential.uid);
+        this.makeData(this.authStatusSub.value)
         localStorage.setItem('user', JSON.stringify(credential));
       }
       else{
@@ -133,6 +190,8 @@ export class AuthService {
   // Sign out
   async SignOut() {
     return this.afAuth.signOut().then(() => {
+      this.userSub?.unsubscribe()
+      this.tournamentSub?.unsubscribe()
       localStorage.removeItem('user');
       setTimeout(() => {
         this.ngZone.run(() => {
@@ -140,5 +199,13 @@ export class AuthService {
         });
       }, 200)
     });
+  }
+
+  setAdminInfo(info: adminInfo) {
+    this.adminInfoSub.next(info)
+  }
+
+  setTournaments(info: {name: string, uid: string, details: string}[]) {
+    this.tournamentsSub.next(info)
   }
 }

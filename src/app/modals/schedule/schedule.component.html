@@ -1,44 +1,91 @@
-<div class="modal-header bg-info" style="border-bottom: none;">
-    <h4 class="modal-title">Schedule</h4>
-    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-<div class="modal-body bg-info">
-<mat-accordion class="example-headers-align" multi>
-    <div *ngFor="let source of dataSource" style=" display: flex; justify-content: center;">
-        <mat-expansion-panel style="width: 80%; margin-left: 20px; margin-bottom: 20px;" [ngStyle]="{'background-color': source.locked ? '#46b52a' : '#7a7a7a'}">
-            <mat-expansion-panel-header [collapsedHeight]="'130px'" [expandedHeight]="'130px'">
-                <div class="panelContainer">
-                    <div class="panelBox">
-                        <span><strong>Runners</strong></span><br>
-                        <span>{{ source.runners }}</span><br *ngIf="source.runners.length > 0">
+<mat-dialog-content>
+    <div style="margin: auto; color: white; width: 80%; text-align: center;">
+        <h1 style="font-size: 6vh;"><strong>Schedule</strong></h1>
+    </div>
+    <div class="viewBtnContainer">
+        <div style="color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 18px;">
+            <p>Tournament Select:</p>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                <mat-checkbox *ngFor="let item of tournaments" (change)="updateSelectedTournaments($event)" [value]='item.uid' [checked]="true">{{ item.name }}</mat-checkbox>
+            </div>
+        </div>
+    </div>
+    <div class="example-action-buttons" style="width: 90%; margin: auto;">
+        <button style="color: white;"mat-button (click)="toggleExpand(true)">Expand All</button>
+        <button style="color: white;" mat-button (click)="toggleExpand(false)">Collapse All</button>
+    </div>
+    <div>
+        <div *ngFor="let source of dataSource">
+            <div *ngIf="selectedTournaments.includes(source.tournament)" class="bigContainer" [ngStyle]="{'background-color': source.locked ? '#458d3345' : 'none'}">
+                <div style="display: flex;">
+                    <div class="matchTable" style="padding-bottom: 25px; width: 95%;">
+                        <div class="info">
+                            <div class="matchContainer">
+                                <div>
+                                    <h3>Runners</h3>
+                                </div>
+                                <div>
+                                    <span>{{ source.runners }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="matchContainer">
+                                <div>
+                                    <h3>Comms</h3>
+                                </div>
+                                <div>
+                                    <span>{{ source.comms }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="matchContainer">
+                                <div>
+                                    <h3>Restreamer</h3>
+                                </div>
+                                <div>
+                                    <span>{{ source.restreamer }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="matchContainer">
+                                <div>
+                                    <h3>Date</h3>
+                                </div>
+                                <div>
+                                    <span>{{ source.date }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="matchContainer">
+                                <div>
+                                    <h3>Confirmed?</h3>
+                                </div>
+                                <div>
+                                    <span>{{ source.locked ? 'Yes' : 'No' }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="panelBox">
-                        <span><strong>Comms</strong></span><br>
-                        <span>{{ source.comms }}</span>
-                    </div>
-                    <div class="panelBox">
-                        <span><strong>Restreamer</strong></span><br>
-                        <span>{{ source.restreamer }}</span>
-                    </div>
-                    <div class="panelBox">
-                        <span><strong>Date</strong></span><br>
-                        <span>{{ source.date }}</span>
-                    </div>
-                    <div class="panelBox">
-                        <span><strong>Confirmed</strong></span><br>
-                        <span>{{ source.locked ? 'Yes' : 'No' }}</span>
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <button class="expandButton" mat-raised-button color="success" style="background-color: #01dde585; border: 2px solid white;" (click)="toggleOpen(source)" type="button"><i><fa-icon [@toggle]="!source.open ? 'closed' : 'open'" [icon]="faChevronDown" style="display: inline-block;"></fa-icon></i></button>
                     </div>
                 </div>
-            </mat-expansion-panel-header>
-
-            <div class="panelContainer">
-                <div class="panelBox" style="text-align: left;">
-                    <span *ngFor="let runner of source.participantInfo" style="display: block; margin-bottom: 4px;">{{ runner }}</span><br>
+                <div *ngIf="source.open">
+                    <mat-divider style="width: 90%; margin: auto; border-top-color: rgb(207, 48, 207);"></mat-divider>
+                    <div class="matchTable" style="padding-top: 25px; flex-direction: column;">
+                        <div class="info2">
+                            <span *ngFor="let runner of source.participantInfo" style="display: block; margin-bottom: 4px;">{{ runner }}</span><br>
+                        </div>
+                        <div class="info2">
+                            <span style="display: block; margin-bottom: 4px;">Discord Timestamp: {{ source.timestamp }}</span><br>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </mat-expansion-panel>
+        </div>
     </div>
-    </mat-accordion>
-</div>
+</mat-dialog-content>

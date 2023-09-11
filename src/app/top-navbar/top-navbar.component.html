@@ -1,14 +1,32 @@
-<div class="nav">
-    <div *ngIf="userInfo != null && userInfo.displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: 2px;">
-        <button [ngClass]="{'purple': currentOption == 'schedule', 'nothing': currentOption != 'schedule'}" style="font-size: 17px;" mat-button color="accent" (click)="toggleButton('schedule')">Schedule</button>
-        <button [ngClass]="{'purple': currentOption == 'tournaments', 'nothing': currentOption != 'tournaments'}" style="font-size: 17px;" mat-button color="accent" (click)="toggleButton('tournaments')">Tournaments</button>
+<div *ngIf="displayNav" id="topNav" class="nav" [@navBar]="!navToggle ? 'borderVisible' : 'borderHidden'">
+    <div style="width: 50%; padding: 2.5vh;">
+        <span class="title" [routerLink]="['']" (click)="toggleNav('title')"><strong>HK Tournaments</strong></span>
     </div>
-    <div *ngIf="userInfo != null && userInfo.displayName != ''" class="tabs" style="display: flex; justify-content: center; text-align: center; margin-left: auto;">
-        <button style="font-size: 17px;" mat-button color="accent" (click)="displayUserInfo()">{{ userInfo.displayName }}</button>
-        <button style="font-size: 17px;" mat-button color="accent" (click)="authService.SignOut()">Sign Out</button>
+    <div *ngIf="screenWidth >= 920" class="tabs">
+        <button mat-button color="accent" [ngClass]="navTab == '/' ? 'purpleTab' : 'none'" [routerLink]="['']">Matches</button>
+        <button mat-button color="accent" [ngClass]="navTab == '/tournaments' ? 'purpleTab' : 'none'" [routerLink]="['tournaments']">Tournaments</button>
+        <button mat-button color="accent" [ngClass]="navTab == '/profile' ? 'purpleTab' : 'none'" [matMenuTriggerFor]="profile">Profile</button>
+        <mat-menu #profile="matMenu">
+            <button class="menuTab" mat-button color="accent" [routerLink]="['profile']">Settings</button>
+            <button class="menuTab" mat-button color="accent" (click)="authService.SignOut()">Sign out</button>
+        </mat-menu>
     </div>
-    <div *ngIf="userInfo != null && userInfo.displayName == ''" class="tabs">
-        <button style="font-size: 17px;" mat-button color="accent" [routerLink]="['sign-in']">Sign In</button>
-        <button style="font-size: 17px;" mat-button color="accent" [routerLink]="['sign-up']">Sign Up</button>
+    <div *ngIf="screenWidth < 920" class="tabs" style="caret-color: transparent;">
+        <div style="margin: auto; flex-direction: column; margin-right: 3vw;" (click)="toggleNav('none')">
+            <div class="icon-bar" [@hamburgerX]="!navToggle ? 'hamburger' : 'topX'"></div>
+            <div class="icon-bar" [@hamburgerX]="!navToggle ? 'hamburger' : 'hide'"></div>
+            <div class="icon-bar" [@hamburgerX]="!navToggle ? 'hamburger' : 'bottomX'"></div>
+        </div>
+    </div>
+</div>
+<div *ngIf="displayNav" class="nav" [@navBar]="navToggle ? 'navMenuVisible' : 'navMenuHidden'" style="position: absolute; z-index: 100; opacity: 0; pointer-events: none;">
+    <div class="toggleTabs">
+        <button mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['']">Matches</button>
+        <button mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['tournaments']">Tournaments</button>
+        <button mat-button color="accent" [matMenuTriggerFor]="profile">Profile</button>
+        <mat-menu #profile="matMenu" style="color: rgb(207, 48, 207) !important; margin-right: 15px !important; font-size: 2.3vh !important; background: none !important; text-align: center !important; margin: auto !important;">
+            <button class="mobileMenuTab" mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['profile']">Settings</button>
+            <button class="mobileMenuTab" mat-button color="accent" (click)="authService.SignOut()">Sign out</button>
+        </mat-menu>
     </div>
 </div>

@@ -1,55 +1,101 @@
 import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FormControl } from '@angular/forms';
-import { MatAccordion } from '@angular/material/expansion';
+import { UntypedFormControl } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { adminInfo } from '../home-page/participant';
+import { adminInfo } from './participant';
 import { User } from '../shared/services/user';
 import { UserListService } from '../user-list.service';
+import { AuthService } from '../shared/services/auth.service';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ConfirmScreenComponent } from '../modals/confirm-screen/confirm-screen.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-matches',
   templateUrl: './matches.component.html',
-  styleUrls: ['./matches.component.scss']
+  styleUrls: ['./matches.component.scss'],
+  animations: [
+    trigger('toggle', [
+      /*
+        state hamburguer => is the regular 3 lines style.
+        states topX, hide, and bottomX => used to style the X element
+      */
+      state('closed', style({})),
+      // style top bar to create the X
+      state(
+        'open',
+        style({
+          transform: 'rotate(180deg)',
+        })
+      ),
+      transition('* => *', [
+        animate('0.25s'), // controls animation speed
+      ]),
+    ])
+  ]
 })
 export class MatchesComponent implements OnInit {
 
-  constructor(public afs: AngularFirestore, public router: Router, public userService: UserListService) {
+  constructor(public afs: AngularFirestore, public router: Router, public userService: UserListService, public authService: AuthService, public dialog: MatDialog) {
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd && val.url != '/') {
-        this.subscription.unsubscribe()
+        this.subscription?.unsubscribe()
       }
   });
   }
 
-  @ViewChild(MatAccordion) accordion: MatAccordion;
-  @Input() adminInfo: adminInfo = null
-  @Input() tournaments: {name: string, uid: string}[] = null
-  selectedView = new FormControl("list")
+  @Input() matchFilter: string = ""
+
+  faChevronDown = faChevronDown
+  adminInfo: adminInfo = {
+    uid: "",
+    displayName: "",
+    tournaments: []
+  }
+  tournaments: {name: string, uid: string, details: string}[] = []
+  selectedView = new UntypedFormControl("list")
   selectedTournaments: string[] = []
   displayedColumns: string[] = ['Runners', 'Comms', 'Restreamer', 'Date', 'Locked']
-  dataSource = []
-  resetDataSource = []
+  dataSource: any = []
+  resetDataSource: any = []
   userList: User[] = []
-  subscription: Subscription = null
+  subscription: Subscription | undefined
   adminTournaments: string[] = []
 
   ngOnInit(): void {
+    this.authService.adminInfo.subscribe(info => {
+      this.adminInfo = info
+      this.adminTournaments = info.tournaments.filter((a) => {
+        if (a.admin) {
+          return true
+        } else {
+          return false
+        }
+      }).map((a) => a.tournamentId)
+    })
+    this.authService.tournaments.subscribe(info => {
+      this.tournaments = info
+      this.selectedTournaments = info.map((a: { uid: any; }) => a.uid)
+    })
+
     this.userList = this.userService.getUserList()
     this.subscription = this.afs.collectionGroup('matches', ref => ref.orderBy('date')).snapshotChanges().subscribe(async (resp) => {
       for (const item of resp) {
-        const index = this.dataSource.findIndex((source) => source.matchId == item.payload.doc.id)
+        const index = this.dataSource.findIndex((source: any) => source.matchId == item.payload.doc.id)
         if (item.type == "added" && index == -1) {
-          const dataEntry = await this.createDataEntry(item.payload.doc.data(), item.payload.doc.id, item.payload.doc.ref.parent.parent.id)
+          const dataEntry = await this.createDataEntry(item.payload.doc.data(), item.payload.doc.id, item.payload.doc.ref.parent.parent?.id as string)
           this.dataSource.push(dataEntry)
           this.resetDataSource.push(JSON.parse(JSON.stringify(dataEntry)))
         } else if (item.type == "modified" && index != -1) {
-          const dataEntry = await this.createDataEntry(item.payload.doc.data(), item.payload.doc.id, item.payload.doc.ref.parent.parent.id)
+          const dataEntry = await this.createDataEntry(item.payload.doc.data(), item.payload.doc.id, item.payload.doc.ref.parent.parent?.id as string)
+          const openStatus = this.dataSource[index].open
           this.dataSource[index] = dataEntry
+          this.dataSource[index].open = openStatus
         }
       }
-      this.dataSource = this.dataSource.filter(value => {
+      this.dataSource = this.dataSource.filter((value: { matchId: "", }) => {
         const tmp = resp.map(a => a.payload.doc.id)
         return tmp.includes(value.matchId)
       })
@@ -57,18 +103,6 @@ export class MatchesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tournaments != null && changes.tournaments.currentValue != null) {
-      this.selectedTournaments = changes.tournaments.currentValue.map(a => a.uid)
-    }
-    if (changes.adminInfo != null && changes.adminInfo.currentValue != null) {
-      this.adminTournaments = changes.adminInfo.currentValue.tournaments.filter(a => {
-        if (a.admin) {
-          return true
-        } else {
-          return false
-        }
-      }).map(a => a.tournamentId)
-    }
     // You can also use categoryId.previousValue and
     // categoryId.firstChange for comparing old and new values
 
@@ -83,7 +117,9 @@ export class MatchesComponent implements OnInit {
   }
 
   async createDataEntry(data: any, id: string, tournament: string) {
-    const d = data.date.toDate().toString()
+    const d = data.date.toDate()
+    const timestamp = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), 0)
+    const timeString = "<t:" + timestamp.getTime().toString().substring(0, timestamp.getTime().toString().length - 3) + ":F>"
     const runnersList = await this.getUsers(data.runners)
     const commsList = await this.getUsers(data.comms)
     const restreamerList = await this.getUsers(data.restreamer)
@@ -91,6 +127,7 @@ export class MatchesComponent implements OnInit {
     const participantInfo = []
     const adminComms = []
     const adminRestreamer = []
+    const runnerIds = runnersList.map(a => a.uid)
     let runners = ""
     let runnerCommand = ""
     let comms = ""
@@ -141,25 +178,37 @@ export class MatchesComponent implements OnInit {
       }
     }
 
-    const selectedComms = new FormControl('')
+    const selectedComms = new UntypedFormControl('')
     selectedComms.setValue(adminComms.map(a => a.id))
-    const selectedRestreamer = new FormControl('')
+    const selectedRestreamer = new UntypedFormControl('')
     selectedRestreamer.setValue(adminRestreamer.map(a => a.id))
+    const matchTitle = new UntypedFormControl('')
+    matchTitle.setValue(data.title)
     return {
+      title: runners,
+      color: {
+        primary: '#1e90ff',
+        secondary: '#D1E8FF',
+      },
+      start: data.date.toDate(),
       commsForm: selectedComms,
       restreamerForm: selectedRestreamer,
       adminComms: adminComms,
       adminRestreamer: adminRestreamer,
+      runnerIds: runnerIds,
       runners: runners,
       comms: comms,
       restreamer: restreamer,
-      date: d.replace(d.substring(d.indexOf("GMT"), d.indexOf("GMT") + 8), ""),
+      date: d.toString().replace(d.toString().substring(d.toString().indexOf("GMT"), d.toString().indexOf("GMT") + 8), ""),
+      timestamp: timeString,
       locked: data.locked,
       matchId: id,
       participantInfo: participantInfo,
       tournament: tournament,
       onHKC: data.onHKC,
-      commands: [runnerCommand, commsCommand]
+      matchTitle: matchTitle,
+      commands: [runnerCommand, commsCommand],
+      open: false
     }
   }
 
@@ -169,7 +218,16 @@ export class MatchesComponent implements OnInit {
       if (this.userList.map(a => a.uid).includes(user)) {
         retList.push(this.userList.filter(item => item.uid == user)[0])
       } else {
-        let tmpUser: User = null
+        let tmpUser: User = {
+          uid: "",
+          email: "",
+          displayName: "",
+          discordId: "",
+          twitch: "",
+          pronouns: "",
+          photoURL: "",
+          emailVerified: false
+       }
         await this.afs.collection('users').doc(user).ref.get().then(function (doc) {
           if (doc.exists) {
             retList.push(doc.data() as User)
@@ -193,8 +251,8 @@ export class MatchesComponent implements OnInit {
   }
 
   resetMatch(source: any) {
-    const index = this.dataSource.findIndex((match) => match.matchId == source.matchId)
-    const indexCopy = this.resetDataSource.findIndex((match) => match.matchId == source.matchId)
+    const index = this.dataSource.findIndex((match: any) => match.matchId == source.matchId)
+    const indexCopy = this.resetDataSource.findIndex((match: any) => match.matchId == source.matchId)
     this.dataSource[index].commsForm.setValue(this.resetDataSource[indexCopy].commsForm.value)
     this.dataSource[index].adminComms = JSON.parse(JSON.stringify(this.resetDataSource[indexCopy].adminComms))
     this.dataSource[index].restreamerForm.setValue(this.resetDataSource[indexCopy].restreamerForm.value)
@@ -206,11 +264,11 @@ export class MatchesComponent implements OnInit {
   }
 
   toggleSignUp(choice: string, source: any) {
-    const index = this.dataSource.findIndex((match) => match.matchId == source.matchId)
+    const index = this.dataSource.findIndex((match: any) => match.matchId == source.matchId)
     if (choice == "comms") {
       let commsForm = source.commsForm.value
       if (this.dataSource[index].commsForm.value.includes(this.adminInfo.uid)) {
-        commsForm = commsForm.filter(item => item != this.adminInfo.uid)
+        commsForm = commsForm.filter((item: string) => item != this.adminInfo.uid)
       } else {
         commsForm.push(this.adminInfo.uid)
       }
@@ -220,7 +278,7 @@ export class MatchesComponent implements OnInit {
     } else if (choice == "restreamer") {
       let restreamerForm = source.restreamerForm.value
       if (this.dataSource[index].restreamerForm.value.includes(this.adminInfo.uid)) {
-        restreamerForm = restreamerForm.filter(item => item != this.adminInfo.uid)
+        restreamerForm = restreamerForm.filter((item: string) => item != this.adminInfo.uid)
       } else {
         restreamerForm.push(this.adminInfo.uid)
       }
@@ -230,9 +288,53 @@ export class MatchesComponent implements OnInit {
     }
   }
 
+  saveMatchTitle(source: any) {
+    this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
+      title: source.matchTitle.value,
+    })
+
+    this.dialog.open(ConfirmScreenComponent, {
+      data: "Stream title updated!",
+      position: {
+        top: '5%'
+      }
+    });
+  }
+
   toggleHKC(source: any) {
     this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
       onHKC: !source.onHKC,
     })
+  }
+
+  updateMatch(data: any) {
+    if (data.option == 'confirm') {
+      this.toggleConfirm(data.source)
+    } else if (data.option == 'delete') {
+      this.deleteMatch(data.source)
+    } else if (data.option == 'reset') {
+      this.resetMatch(data.source)
+    } else if (data.option == 'HKC') {
+      this.toggleHKC(data.source)
+    } else if (data.option == 'SignUp') {
+      this.toggleSignUp(data.choice, data.source)
+    }
+  }
+
+  toggleOpen(source: any) {
+    const index = this.dataSource.findIndex((match: any) => match.matchId == source.matchId)
+    this.dataSource[index].open = !this.dataSource[index].open
+  }
+
+  toggleExpand(expand: boolean) {
+    if (expand) {
+      for (const source of this.dataSource) {
+        source.open = true
+      }
+    } else {
+      for (const source of this.dataSource) {
+        source.open = false
+      }
+    }
   }
 }

@@ -1,13 +1,61 @@
-.panelContainer {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
+.viewBtnContainer {
+  display: flex;
+  justify-content: center;
+}
 
-  .panelBox {
-    display: block;
-    white-space: normal;
-    width: 100%;
-    word-wrap: break-word;
-    text-align: center;
+.login__input {
+border: none;
+background: white;
+padding: 10px;
+padding-left: 24px;
+width: 50%;
+  height: 50%;
+transition: .2s;
+}
+
+.matchTable {
+  display: flex;
+  justify-content: space-evenly;
+  color: rgb(238, 238, 238);
+  margin: auto;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+.bigContainer {
+  width: 90%;
+  margin: auto;
+  margin-bottom: 10px;
+  padding: 15px;
+  box-shadow: -1px 1px 10px 1px black;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.matchContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.info {
+  margin: auto;
+  margin-top: 0;
+}
+
+.mat-success {
+  background-color: #155724;
+}
+
+::ng-deep .mat-mdc-checkbox label {
+  color: white;
+  font-size: 16px;
+}
+
+@media only screen and (min-width: 700px) {
+  .info {
+      width: 20%;
   }
+}

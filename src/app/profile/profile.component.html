@@ -1,0 +1,27 @@
+<div class="header">
+    <h1><strong>Profile Settings</strong></h1>
+</div>
+<div class="bigContainer">
+    <div class="infoContainer">
+        <h3>Discord ID</h3>
+        <input type="text" class="login__input" [formControl]="discordId">
+    </div>
+    <mat-divider style="width: 80%; margin: auto; border-top-color: rgb(207, 48, 207);"></mat-divider>
+    <div class="infoContainer">
+        <h3>Display Name</h3>
+        <input type="text" class="login__input" [formControl]="displayName">
+    </div>
+    <mat-divider style="width: 80%; margin: auto; border-top-color: rgb(207, 48, 207);"></mat-divider>
+    <div class="infoContainer">
+        <h3>Twitch</h3>
+        <input type="text" class="login__input" [formControl]="twitch">
+    </div>
+    <mat-divider style="width: 80%; margin: auto; border-top-color: rgb(207, 48, 207);"></mat-divider>
+    <div class="infoContainer">
+        <h3>Pronouns</h3>
+        <input type="text" class="login__input" [formControl]="pronouns">
+    </div>
+    <div class="infoContainer" style="display: flex; justify-content: right;">
+        <button mat-raised-button color="success" style="background-color: #155724; color: white;" (click)="setUserData()">Save</button>
+    </div>
+</div>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ScheduleComponent } from '../modals/schedule/schedule.component';
 import { AuthService } from "../shared/services/auth.service";
 import { faEnvelope, faLock, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-sign-in',
@@ -10,8 +10,9 @@ import { faEnvelope, faLock, faChevronRight } from '@fortawesome/free-solid-svg-
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
+
   constructor(
-    public authService: AuthService, private modalService: NgbModal
+    public authService: AuthService, public dialog: MatDialog
   ) { }
 
   faEnvelope = faEnvelope
@@ -21,10 +22,11 @@ export class SignInComponent implements OnInit {
   ngOnInit() { }
 
   openSchedule() {
-    this.modalService.open(ScheduleComponent, {
-      size: 'xl',
-      centered: true,
-      windowClass: 'dark-modal'
+    this.dialog.open(ScheduleComponent, {
+      panelClass: 'custom-dialog-container',
+      position: {
+        top: '9%'
+      },
     });
   }
 }

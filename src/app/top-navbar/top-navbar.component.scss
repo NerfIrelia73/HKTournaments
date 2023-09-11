@@ -1,17 +1,62 @@
 .nav {
     width: 100%;
-    height: 72px;
-    margin-bottom: 80px;
-    border-bottom: 2px solid purple;
+    height: auto;
+    border-bottom: 2.5px solid purple;
     background: black;
+    color: rgb(207, 48, 207);
+    display: flex;
+    align-items: center;
+}
+
+.discordBtn {
+    max-height: 80px;
+    max-width: 80px;
+    z-index: 100;
+    width: 6vw;
+    height: auto;
+}
+
+.menuTab {
+    color: rgb(207, 48, 207) !important;
+    margin-right: 15px !important;
+    font-size: 2.3vh !important;
+    background: none !important;
+    text-align: center !important;
+    margin: auto !important;
+}
+
+.mobileMenu {
+    background: black !important;
+    display: flex !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    margin: auto !important;
+    width: 100% !important;
+    padding: 10px !important;
+}
+
+.mobileMenuTab {
+    color: rgb(207, 48, 207) !important;
+    margin-right: 15px !important;
+    font-size: 2.3vh !important;
+    background: none !important;
+    text-align: center !important;
+    margin: auto !important;
 }
 
 .tabs {
-    background: black;
-    margin-right: 0;
+    background: none !important;
     display: flex;
-    justify-content: center;
-    text-align: center;
+    justify-content: right;
+    margin-right: auto;
+    width: 50%;
+}
+
+.tabs > button {
+    color: rgb(207, 48, 207);
+    margin-right: 15px;
+    font-size: 2.3vh;
+    background: none;
 }
 
 .purple {
@@ -24,15 +69,56 @@
     background-color: none !important;
 }
 
-@media only screen and (max-width: 460px) {
-    .nav {
-        height: 50px;
-    }
+.title {
+    font-size: 2.8vw;
+    margin-right: 2vh;
+    cursor: pointer;
+}
 
-    .tabs {
-        width: 48%;
-        align-items: center;
-        height: 100%;
-    }
+.toggleTabs {
+    background: black;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+}
 
+.toggleTabs > button {
+    color: rgb(207, 48, 207);
+    font-size: 2.3vh;
+    background: none;
+}
+
+.icon-bar {
+    width: 22px;
+    height: 2px;
+    background: rgb(207, 48, 207);
+    margin: 3px;
+    position: relative;
+}
+
+.purpleTab {
+    border-bottom: 2px solid rgb(207, 48, 207);
+}
+
+.none {
+    border-bottom: none;
+}
+
+::ng-deep .mat-mdc-menu-content {
+    margin: 0;
+    padding: 8px 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    background: black;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 920px) {
+    .title {
+        font-size: 4.5vw;
+    }
 }

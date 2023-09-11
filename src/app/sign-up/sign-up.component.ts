@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../shared/services/auth.service";
 import { faEnvelope, faLock, faUser, faHashtag, faGamepad, faVenusMars, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { ScheduleComponent } from '../modals/schedule/schedule.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,7 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class SignUpComponent implements OnInit {
   constructor(
-    public authService: AuthService, private modalService: NgbModal
+    public authService: AuthService, public dialog: MatDialog
   ) { }
 
     faEnvelope = faEnvelope
@@ -25,10 +25,11 @@ export class SignUpComponent implements OnInit {
   ngOnInit() { }
 
   openSchedule() {
-    this.modalService.open(ScheduleComponent, {
-      size: 'xl',
-      centered: true,
-      windowClass: 'dark-modal'
+    this.dialog.open(ScheduleComponent, {
+      panelClass: 'custom-dialog-container',
+      position: {
+        top: '9%'
+      },
     });
   }
 }

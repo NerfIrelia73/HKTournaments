@@ -1,45 +1,51 @@
-<div style="display: flex; justify-content: center;">
-    <mat-card style="width: 40%; margin-top: 100px;">
-        <mat-card-title>Create a Match</mat-card-title>
-        <mat-card-subtitle>Select Tournament</mat-card-subtitle>
-        <mat-form-field appearance="fill">
+<div class="header">
+    <h1><strong>Create a Match</strong></h1>
+</div>
+<div class="bigContainer">
+    <div class="infoContainer">
+        <h3>Select a Tournament</h3>
+        <mat-form-field appearance="fill" style="width: 90%; max-width: 400px;">
             <mat-label>Tournament</mat-label>
             <mat-select [formControl]="selectedTournament">
               <mat-option *ngFor="let tournament of tournaments" [value]="tournament.uid">{{ tournament.name }}</mat-option>
             </mat-select>
         </mat-form-field>
-        <br>
-        <div *ngIf="tournamentIndex != -1">
-            <mat-card-subtitle>Select Runners</mat-card-subtitle>
-            <mat-form-field appearance="fill">
+    </div>
+    <div *ngIf="tournamentIndex != -1" class="infoContainer">
+        <h3>Select Runners</h3>
+        <div>
+            <mat-form-field appearance="fill" style="width: 90%; max-width: 400px;">
                 <mat-label>Runners</mat-label>
                 <mat-select [formControl]="selectedParticipants" multiple>
                     <mat-option *ngFor="let participant of tournaments[tournamentIndex].participants" [value]="participant.displayName">{{ participant.displayName }}</mat-option>
                 </mat-select>
             </mat-form-field>
-            <br>
-            <span><strong>Selected Runners: </strong>{{ selectedParticipants.value }}</span>
-            <mat-card-subtitle style="margin-top: 10px;">Select a Date and Time</mat-card-subtitle>
-            <span><strong>ALL TIMES IN UTC</strong></span><br><br>
-            <div style="display: flex; justify-content: left;">
-                <mat-form-field appearance="fill" style="margin-right: 20px;">
-                    <mat-label>Choose a date</mat-label>
-                    <input matInput [matDatepicker]="picker" [readonly]="true" [formControl]="selectedDate">
-                    <mat-hint>MM/DD/YYYY</mat-hint>
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Time</mat-label>
-                    <mat-select [formControl]="selectedTime">
-                    <mat-option *ngFor="let timeSlot of availableTimes" [value]="timeSlot.value">{{ timeSlot.time }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
         </div>
-        <mat-card-actions align="end">
-            <button mat-button routerLink="">Back</button>
-            <button mat-button (click)="addMatch()" [disabled]="selectedTime.value.length == 0 || selectedDate.status == 'INVALID'">Create</button>
-        </mat-card-actions>
-    </mat-card>
+        <div>
+            <span><strong>Selected Runners: </strong>{{ selectedParticipants.value }}</span>
+        </div>
+    </div>
+    <div *ngIf="tournamentIndex != -1" class="infoContainer">
+        <h3>Select a Date and Time</h3>
+        <span><strong>ALL TIMES IN UTC</strong></span><br><br>
+        <div style="display: flex; justify-content: left;">
+            <mat-form-field appearance="fill" style="margin-right: 20px;">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" [readonly]="true" [formControl]="selectedDate">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Time</mat-label>
+                <mat-select [formControl]="selectedTime">
+                <mat-option *ngFor="let timeSlot of availableTimes" [value]="timeSlot.value">{{ timeSlot.time }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="infoContainer" style="display: flex; justify-content: right;">
+        <button mat-raised-button color="warn" routerLink="" style="margin-right: 20px;">Back</button>
+        <button mat-raised-button color="success" (click)="addMatch()" [disabled]="selectedTime.value.length == 0 || selectedDate.status == 'INVALID'">Create</button>
+    </div>
 </div>

@@ -17,15 +17,26 @@
     width: 90%;
     margin: auto;
     color: white;
-    max-width: 825px;
+    max-width: 625px;
     margin-bottom: 30px;
 }
 
 .infoContainer {
     padding: 20px;
+    color: rgb(207, 48, 207);
 }
 
 .mat-success {
-    background-color: #155724 !important;
+    background-color: #155724;
     color: white;
+}
+
+.login__input {
+	border: none;
+	background: white;
+	padding: 10px;
+	padding-left: 24px;
+	width: 60%;
+    height: 50%;
+	transition: .2s;
 }

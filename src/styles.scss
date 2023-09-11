@@ -1,15 +1,23 @@
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
 
-html, body { background-color: #2f3136; height: 100%; }
+.dense-1 {
+  @include mat.all-component-densities(-1.5);
+}
+
+html, body { background-color: #2f3136; height: 100%; background-image: linear-gradient(to right, #1a1b1e 35%, #050d22); }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-success {
+  background-color: #155724;
+}
 
 .mat-button.mat-success,
 .mat-stroked-button.mat-success {
-    color: #155724;
+    background-color: #155724;
 }
 .mat-button.mat-success:hover,
 .mat-stroked-button.mat-success:hover {
@@ -69,4 +77,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mat-icon-button.mat-pink {
   color:#ad0ba5;
+}
+
+.custom-dialog-container .mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: #2f3136; height: 100%; background-image: linear-gradient(to right, #1a1b1e 35%, #050d22);
 }

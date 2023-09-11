@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomePageComponent } from './home-page.component';
+import { CalendarMatchComponent } from './calendar-match.component';
 
-describe('HomePageComponent', () => {
-  let component: HomePageComponent;
-  let fixture: ComponentFixture<HomePageComponent>;
+describe('CalendarMatchComponent', () => {
+  let component: CalendarMatchComponent;
+  let fixture: ComponentFixture<CalendarMatchComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomePageComponent ]
+      declarations: [ CalendarMatchComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomePageComponent);
+    fixture = TestBed.createComponent(CalendarMatchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

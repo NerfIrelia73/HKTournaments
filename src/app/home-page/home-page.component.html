@@ -1,9 +1,0 @@
-<app-top-navbar [userInfo]="userInfo[0]" (newOption)="changePage($event)"></app-top-navbar>
-<div style="position: absolute; top: 0; right: 0; margin-top: 95px; width: 250px; display: flex; flex-wrap: wrap; justify-content: center;">
-    <span style="color: rgb(59, 206, 255); font-size: 20px;">Created by NerfIrelia73</span>
-</div>
-<div style="display: flex; justify-content: center; margin-top: 60px;">
-  <h3 class="appHeader">{{page == 'schedule' ? 'Matches' : 'Tournaments'}}</h3>
-</div>
-<app-matches *ngIf="page == 'schedule'" [adminInfo]="adminInfo" [tournaments]="tournaments"></app-matches>
-<app-tournament-sign-up *ngIf="page == 'tournaments'" [adminInfo]="adminInfo" [tournaments]="tournaments"></app-tournament-sign-up>

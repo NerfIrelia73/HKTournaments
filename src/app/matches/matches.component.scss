@@ -1,17 +1,3 @@
-.panelContainer {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.panelBox {
-    display: block;
-    white-space: normal;
-    width: 100%;
-    word-wrap: break-word;
-    text-align: center;
-}
-
 .viewBtnContainer {
     display: flex;
     justify-content: center;
@@ -29,9 +15,77 @@
 .mat-button-toggle {
     background-color: rgb(2, 0, 131);
     color: white;
-  }
+}
 
-  .mat-button-toggle-checked {
+.mat-button-toggle-checked {
     background-color: rgb(72, 0, 139);
     color: white;
-  }
+}
+
+.login__input {
+	border: none;
+	background: white;
+	padding: 10px;
+	padding-left: 24px;
+	width: 50%;
+    height: 50%;
+	transition: .2s;
+}
+
+.matchTable {
+    display: flex;
+    justify-content: space-evenly;
+    color: rgb(238, 238, 238);
+    margin: auto;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.bigContainer {
+    width: 90%;
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 15px;
+    box-shadow: -1px 1px 10px 1px black;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.matchContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.info {
+    margin: auto;
+    margin-top: 0;
+}
+
+.info2 {
+    margin: auto;
+    margin-top: 0;
+}
+
+.mat-success {
+    background-color: #155724 !important;
+}
+
+::ng-deep .mat-mdc-checkbox label {
+    color: white;
+    font-size: 16px;
+}
+
+@media only screen and (min-width: 700px) {
+    .info {
+        width: 20%;
+    }
+}
+
+@media only screen and (min-width: 650px) {
+    .info2 {
+        width: 50%;
+    }
+}

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { UntypedFormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -6,6 +7,11 @@ import { User } from 'src/app/shared/services/user';
 import { UserListService } from 'src/app/user-list.service';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-schedule',
@@ -177,5 +183,10 @@ export class ScheduleComponent implements OnInit {
       }
     }
   }
-
 }
+
+@NgModule({
+  imports: [MatDividerModule, MatCheckboxModule, MatDialogModule, MatButtonModule, FontAwesomeModule, CommonModule],
+  declarations: [ScheduleComponent],
+})
+export class ScheduleModule {}

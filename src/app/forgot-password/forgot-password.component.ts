@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../shared/services/auth.service";
 import { faEnvelope, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { ScheduleComponent } from '../modals/schedule/schedule.component';
-import { MatDialog } from '@angular/material/dialog';
+import { LazyDialogService } from '../shared/services/lazy-dialog.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -10,9 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./forgot-password.component.scss']
 })
 export class ForgotPasswordComponent implements OnInit {
-  constructor(
-    public authService: AuthService, public dialog: MatDialog
-  ) { }
+  constructor(public authService: AuthService, public lazyDialog: LazyDialogService) { }
 
   faEnvelope = faEnvelope
   faChevronRight = faChevronRight
@@ -21,11 +18,12 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   openSchedule() {
-    this.dialog.open(ScheduleComponent, {
+    const config = {
       panelClass: 'custom-dialog-container',
       position: {
         top: '9%'
       },
-    });
+    }
+    this.lazyDialog.openDialog('schedule', config)
   }
 }

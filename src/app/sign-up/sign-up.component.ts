@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../shared/services/auth.service";
 import { faEnvelope, faLock, faUser, faHashtag, faGamepad, faVenusMars, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { ScheduleComponent } from '../modals/schedule/schedule.component';
-import { MatDialog } from '@angular/material/dialog';
+import { LazyDialogService } from '../shared/services/lazy-dialog.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -10,9 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
-  constructor(
-    public authService: AuthService, public dialog: MatDialog
-  ) { }
+  constructor(public authService: AuthService, public lazyDialog: LazyDialogService) { }
 
     faEnvelope = faEnvelope
     faLock = faLock
@@ -25,11 +22,12 @@ export class SignUpComponent implements OnInit {
   ngOnInit() { }
 
   openSchedule() {
-    this.dialog.open(ScheduleComponent, {
+    const config = {
       panelClass: 'custom-dialog-container',
       position: {
         top: '9%'
       },
-    });
+    }
+    this.lazyDialog.openDialog('schedule', config)
   }
 }

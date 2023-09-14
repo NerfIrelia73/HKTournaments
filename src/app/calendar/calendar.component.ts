@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {
   isSameDay,
   isSameMonth
@@ -9,9 +9,7 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView,
 } from 'angular-calendar';
-import { CalendarMatchComponent } from '../modals/calendar-match/calendar-match.component';
-import { adminInfo } from '../matches/participant';
-import { MatDialog } from '@angular/material/dialog';
+import { LazyDialogService } from '../shared/services/lazy-dialog.service';
 
 @Component({
   selector: 'calendar',
@@ -20,12 +18,9 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class CalendarComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public lazyDialog: LazyDialogService) { }
 
   ngOnInit(): void {
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
   }
 
   @Input() events: any = []
@@ -80,7 +75,8 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEvent(action: string, event: any): void {
-    this.dialog.open(CalendarMatchComponent, {
+
+    const config = {
       panelClass: 'custom-dialog-container',
       data: {
         matchId: event.matchId
@@ -88,7 +84,8 @@ export class CalendarComponent implements OnInit {
       position: {
         top: '9%'
       },
-    });
+    }
+    this.lazyDialog.openDialog('calendar-match', config)
   }
 
   setView(view: CalendarView) {

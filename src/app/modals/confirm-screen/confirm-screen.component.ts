@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, NgModule } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -16,3 +16,9 @@ export class ConfirmScreenComponent {
   }
 
 }
+
+@NgModule({
+  imports: [],
+  declarations: [ConfirmScreenComponent],
+})
+export class ConfirmScreenModule {}

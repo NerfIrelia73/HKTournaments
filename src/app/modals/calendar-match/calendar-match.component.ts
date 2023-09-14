@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, NgModule, OnInit, Output } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { UserListService } from 'src/app/user-list.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SharedModule } from "../../shared/shared.module";
 
 @Component({
   selector: 'app-calendar-match',
@@ -22,9 +24,6 @@ export class CalendarMatchComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-  }
-
   sendToCalendar(source: any, choice: string | null, option: string) {
     const data = {
       source: source,
@@ -34,3 +33,9 @@ export class CalendarMatchComponent implements OnInit {
     this.updateCalendar.emit(data)
   }
 }
+
+@NgModule({
+    declarations: [CalendarMatchComponent],
+    imports: [MatDialogModule, SharedModule]
+})
+export class CalendarMatchModule {}

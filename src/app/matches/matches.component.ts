@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { UntypedFormControl } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
@@ -9,8 +9,7 @@ import { UserListService } from '../user-list.service';
 import { AuthService } from '../shared/services/auth.service';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ConfirmScreenComponent } from '../modals/confirm-screen/confirm-screen.component';
-import { MatDialog } from '@angular/material/dialog';
+import { LazyDialogService } from '../shared/services/lazy-dialog.service';
 
 @Component({
   selector: 'app-matches',
@@ -38,7 +37,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class MatchesComponent implements OnInit {
 
-  constructor(public afs: AngularFirestore, public router: Router, public userService: UserListService, public authService: AuthService, public dialog: MatDialog) {
+  constructor(public afs: AngularFirestore, public router: Router, public userService: UserListService, public authService: AuthService, public lazyDialog: LazyDialogService) {
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd && val.url != '/') {
         this.subscription?.unsubscribe()
@@ -101,12 +100,6 @@ export class MatchesComponent implements OnInit {
       })
     });
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-    // You can also use categoryId.previousValue and
-    // categoryId.firstChange for comparing old and new values
-
-}
 
   updateSelectedTournaments(event: any) {
     if (event.checked) {
@@ -293,12 +286,13 @@ export class MatchesComponent implements OnInit {
       title: source.matchTitle.value,
     })
 
-    this.dialog.open(ConfirmScreenComponent, {
-      data: "Stream title updated!",
+    const config = {
+      data: 'Stream title updated!',
       position: {
         top: '5%'
       }
-    });
+    }
+    this.lazyDialog.openDialog('confirm-screen', config)
   }
 
   toggleHKC(source: any) {

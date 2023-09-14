@@ -3,8 +3,7 @@ import { FormControl } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { User } from '../shared/services/user';
-import { ConfirmScreenComponent } from '../modals/confirm-screen/confirm-screen.component';
-import { MatDialog } from '@angular/material/dialog';
+import { LazyDialogService } from '../shared/services/lazy-dialog.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ProfileComponent {
 
-  constructor(public authService: AuthService, public afs: AngularFirestore, public dialog: MatDialog) { }
+  constructor(public authService: AuthService, public afs: AngularFirestore, public lazyDialog: LazyDialogService) { }
 
   displayName = new FormControl('')
   discordId = new FormControl('')
@@ -49,12 +48,13 @@ export class ProfileComponent {
         merge: true,
       });
 
-      this.dialog.open(ConfirmScreenComponent, {
+      const config = {
         data: "Profile settings updated!",
         position: {
           top: '5%'
         }
-      });
+      }
+      this.lazyDialog.openDialog('confirm-screen', config)
 
     }
 

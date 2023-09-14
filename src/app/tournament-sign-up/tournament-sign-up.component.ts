@@ -11,7 +11,7 @@ import { AuthService } from '../shared/services/auth.service';
 })
 export class TournamentSignUpComponent implements OnInit {
 
-  constructor(public authService: AuthService, public afs: AngularFirestore) { }
+  constructor(public authService: AuthService, public afs: AngularFirestore) {}
 
   adminInfo: adminInfo = {
     uid: "",

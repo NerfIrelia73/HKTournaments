@@ -1,3 +1,7 @@
-<div class="container" style="background-color: #17bb12;">
-    <h3>{{ data }}</h3>
+<div *ngIf="data.good" class="container" style="background-color: #17bb12;">
+    <h3>{{ data.text }}</h3>
+</div>
+
+<div *ngIf="!data.good" class="container">
+    <h3>{{ data.text }}</h3>
 </div>

@@ -49,7 +49,10 @@ export class ProfileComponent {
       });
 
       const config = {
-        data: "Profile settings updated!",
+        data: {
+          good: true,
+          text: "Profile settings updated!"
+        },
         position: {
           top: '5%'
         }

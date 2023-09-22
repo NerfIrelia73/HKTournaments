@@ -200,6 +200,7 @@ export class MatchesComponent implements OnInit {
       tournament: tournament,
       onHKC: data.onHKC,
       matchTitle: matchTitle,
+      currentMatchTtile: data.title,
       commands: [runnerCommand, commsCommand],
       open: false
     }
@@ -236,11 +237,24 @@ export class MatchesComponent implements OnInit {
   }
 
   toggleConfirm(source: any) {
-    this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
-      comms: source.commsForm.value,
-      restreamer: source.restreamerForm.value,
-      locked: !source.locked
-    })
+    if (source.currentMatchTtile == "") {
+      const config = {
+        data: {
+          good: false,
+          text: 'Stream title has not been set so the match cannot be confirmed.  Please set the stream title so the HKC Twitch Bot can correctly update the stream title before the stream begins.  Example match title: Any% Tournament Round 4: @NerfIrelia73 vs @homothety.  Make sure to include the @ in front of the twitch names for the runners so the title links to their twitch accounts on stream',
+        },
+        position: {
+          top: '5%'
+        }
+      }
+      this.lazyDialog.openDialog('confirm-screen', config)
+    } else {
+      this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
+        comms: source.commsForm.value,
+        restreamer: source.restreamerForm.value,
+        locked: !source.locked
+      })
+    }
   }
 
   resetMatch(source: any) {
@@ -285,9 +299,13 @@ export class MatchesComponent implements OnInit {
     this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
       title: source.matchTitle.value,
     })
+    source.currentMatchTtile = source.matchTitle.value
 
     const config = {
-      data: 'Stream title updated!',
+      data: {
+        good: true,
+        text: 'Stream title updated!'
+      },
       position: {
         top: '5%'
       }

@@ -1,7 +1,15 @@
-<div *ngIf="data.good" class="container" style="background-color: #17bb12;">
+<div *ngIf="data.good != null && data.good" class="container" style="background-color: #17bb12;">
     <h3>{{ data.text }}</h3>
 </div>
 
-<div *ngIf="!data.good" class="container">
+<div *ngIf="data.good != null &&  !data.good" class="container">
     <h3>{{ data.text }}</h3>
+</div>
+
+<div *ngIf="data.good == null" class="container" style="background-color: #2f3136; height: 100%; background-image: linear-gradient(to right, #1a1b1e 35%, #050d22);">
+    <h3 style="color: white;">{{ data.text }}</h3>
+    <div class="matchTable">
+        <button (click)="confirm()" mat-raised-button color="success" style="background-color: #155724;">Yes</button>
+        <button (click)="cancel()" mat-raised-button color="warn">No</button>
+    </div>
 </div>

@@ -22,7 +22,7 @@
     <button style="color: white;"mat-button (click)="toggleExpand(true)">Expand All</button>
     <button style="color: white;" mat-button (click)="toggleExpand(false)">Collapse All</button>
 </div>
-<div *ngIf="selectedView.value == 'list'">
+<div *ngIf="selectedView.value == 'list'" style="padding-bottom: 70px;">
     <div *ngFor="let source of dataSource">
         <div *ngIf="(selectedTournaments.includes(source.tournament) && matchFilter == '') || (source.matchId == matchFilter)" class="bigContainer" [ngStyle]="{'background-color': source.locked ? '#458d3345' : 'none'}">
             <div style="display: flex;">
@@ -111,6 +111,7 @@
                     <div class="info2">
                         <span *ngFor="let command of source.commands" style="display: block; margin-bottom: 4px;">{{ command }}</span><br>
                         <span style="display: block; margin-bottom: 4px;">Discord Timestamp: {{ source.timestamp }}</span><br>
+                        <span style="display: block; margin-bottom: 4px;">Match Created On: {{ source.createdOn }}</span><br>
                     </div>
                 </div>
                 <div class="matchTable" *ngIf="adminInfo != null && adminTournaments.includes(source.tournament) && selectedTournaments.includes(source.tournament)" style="justify-content: center;">

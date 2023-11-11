@@ -111,6 +111,10 @@ export class MatchesComponent implements OnInit {
 
   async createDataEntry(data: any, id: string, tournament: string) {
     const d = data.date.toDate()
+    let c = "";
+    if (data.createdOn != null) {
+      c = data.createdOn.toDate()
+    }
     const timestamp = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), 0)
     const timeString = "<t:" + timestamp.getTime().toString().substring(0, timestamp.getTime().toString().length - 3) + ":F>"
     const runnersList = await this.getUsers(data.runners)
@@ -193,6 +197,7 @@ export class MatchesComponent implements OnInit {
       comms: comms,
       restreamer: restreamer,
       date: d.toString().replace(d.toString().substring(d.toString().indexOf("GMT"), d.toString().indexOf("GMT") + 8), ""),
+      createdOn: c.toString().replace(d.toString().substring(d.toString().indexOf("GMT"), d.toString().indexOf("GMT") + 8), ""),
       timestamp: timeString,
       locked: data.locked,
       matchId: id,
@@ -273,25 +278,47 @@ export class MatchesComponent implements OnInit {
   toggleSignUp(choice: string, source: any) {
     const index = this.dataSource.findIndex((match: any) => match.matchId == source.matchId)
     if (choice == "comms") {
-      let commsForm = source.commsForm.value
+      let commsForm = JSON.parse(JSON.stringify(source.commsForm.value))
+      let text = `Are you sure you would like to sign up for ${choice}?`
       if (this.dataSource[index].commsForm.value.includes(this.adminInfo.uid)) {
         commsForm = commsForm.filter((item: string) => item != this.adminInfo.uid)
+        text = `Are you sure you would like to remove yourself from ${choice}?`
       } else {
         commsForm.push(this.adminInfo.uid)
       }
-      this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
-        comms: commsForm,
-      })
+      const config = {
+        data: {
+          text: text,
+          choice: choice,
+          source: source,
+          commsForm: commsForm
+        },
+        position: {
+          top: '18%'
+        }
+      }
+      this.lazyDialog.openDialog('confirm-screen', config)
     } else if (choice == "restreamer") {
-      let restreamerForm = source.restreamerForm.value
+      let restreamerForm = JSON.parse(JSON.stringify(source.restreamerForm.value))
+      let text = `Are you sure you would like to sign up for restreaming?`
       if (this.dataSource[index].restreamerForm.value.includes(this.adminInfo.uid)) {
         restreamerForm = restreamerForm.filter((item: string) => item != this.adminInfo.uid)
+        text = `Are you sure you would like to remove yourself from restreaming?`
       } else {
         restreamerForm.push(this.adminInfo.uid)
       }
-      this.afs.doc(`tournaments/${source.tournament}/matches/${source.matchId}`).update({
-        restreamer: restreamerForm,
-      })
+      const config = {
+        data: {
+          text: text,
+          choice: choice,
+          source: source,
+          restreamerForm: restreamerForm
+        },
+        position: {
+          top: '18%'
+        }
+      }
+      this.lazyDialog.openDialog('confirm-screen', config)
     }
   }
 

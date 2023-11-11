@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl, UntypedFormControl } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
 import { Participant, User } from '../shared/services/user';
 import { NavigationEnd, Router } from '@angular/router';
@@ -22,7 +22,7 @@ export class CreateMatchComponent implements OnInit {
   tournamentIndex = -1
   selectedTournament = new UntypedFormControl('')
   participantList: User[] = []
-  selectedParticipants = new UntypedFormControl('')
+  selectedParticipants = new FormControl()
   selectedTime = new UntypedFormControl('')
   selectedDate = new UntypedFormControl(Date)
   loading = false
@@ -117,7 +117,7 @@ export class CreateMatchComponent implements OnInit {
     );
 
     this.selectedTournament.valueChanges.subscribe(val => {
-      this.selectedParticipants.setValue('')
+      this.selectedParticipants.setValue([])
       this.tournamentIndex = this.tournaments.findIndex(tournament => tournament.uid == val)
     })
   }
@@ -126,12 +126,12 @@ export class CreateMatchComponent implements OnInit {
     if (!this.loading) {
       this.loading = true
       const d = new Date(Date.UTC(this.selectedDate.value.getFullYear(), this.selectedDate.value.getMonth(), this.selectedDate.value.getDate(), this.selectedTime.value.split(":")[0], this.selectedTime.value.split(":")[1], 0))
-      const finalRunners = this.participantList.filter(user => {
-        return this.selectedParticipants.value.includes(user.displayName)
-      }).map(a => a.uid)
+      const createdOn = new Date()
+      const finalRunners = this.selectedParticipants.value.map((a: { uid: any; }) => a.uid)
       this.afs.collection(`tournaments/${this.selectedTournament.value}/matches`).add({
         comms: [],
         date: d,
+        createdOn: createdOn,
         restreamer: [],
         runners: finalRunners,
         locked: false,

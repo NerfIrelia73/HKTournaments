@@ -6,3 +6,15 @@
     padding: 20px;
     padding-top: 0px;
 }
+
+.matchTable {
+    display: flex;
+    justify-content: space-evenly;
+    color: rgb(238, 238, 238);
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.mat-success {
+    background-color: #155724 !important;
+}

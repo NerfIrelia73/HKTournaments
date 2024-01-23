@@ -1,0 +1,26 @@
+.eventTable {
+    display: flex;
+    justify-content: center;
+    color: rgb(238, 238, 238);
+    width: 80%;
+    margin: auto;
+    margin-bottom: 10px;
+    text-align: center;
+    border-bottom: 2px solid grey;
+    padding: 15px;
+}
+
+.eventContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.sign-up-btn {
+    width: 90px;
+    height: 45px;
+    display: inline-block;
+}
+
+.mat-success {
+    background-color: #155724 !important;
+}

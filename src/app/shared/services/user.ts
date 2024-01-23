@@ -5,6 +5,7 @@ export interface User {
     discordId: string;
     twitch: string;
     pronouns: string;
+    siteAdmin: boolean;
     photoURL: string;
     emailVerified: boolean;
  }

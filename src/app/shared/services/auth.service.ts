@@ -147,8 +147,8 @@ export class AuthService {
     return user !== null;
   }
 
-  // getUserInfo(): Observable<User[]> {
-  //   return of(this.userInfo)
+  // getUserInfo(): Observable<User> {
+  //   return (this.usersInfo)
   // }
 
   // Auth logic to run auth providers
@@ -178,6 +178,7 @@ export class AuthService {
       discordId: discordId,
       twitch: twitch,
       pronouns: pronouns,
+      siteAdmin: false,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
     };

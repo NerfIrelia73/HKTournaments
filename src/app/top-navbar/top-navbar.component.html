@@ -3,6 +3,7 @@
         <span class="title" [routerLink]="['']" (click)="toggleNav('title')"><strong>HK Tournaments</strong></span>
     </div>
     <div *ngIf="screenWidth >= 920" class="tabs">
+        <button *ngIf="userInfo?.siteAdmin" mat-button color="accent" [ngClass]="navTab == '/admin-panel' ? 'purpleTab' : 'none'" [routerLink]="['admin-panel']">Admin Panel</button>
         <button mat-button color="accent" [ngClass]="navTab == '/' ? 'purpleTab' : 'none'" [routerLink]="['']">Matches</button>
         <button mat-button color="accent" [ngClass]="navTab == '/tournaments' ? 'purpleTab' : 'none'" [routerLink]="['tournaments']">Tournaments</button>
         <button mat-button color="accent" [ngClass]="navTab == '/profile' ? 'purpleTab' : 'none'" [matMenuTriggerFor]="profile">Profile</button>
@@ -21,12 +22,10 @@
 </div>
 <div *ngIf="displayNav" class="nav" [@navBar]="navToggle ? 'navMenuVisible' : 'navMenuHidden'" style="position: absolute; z-index: 100; opacity: 0; pointer-events: none;">
     <div class="toggleTabs">
+        <button *ngIf="userInfo?.siteAdmin" mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['admin-panel']">Admin Panel</button>
         <button mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['']">Matches</button>
         <button mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['tournaments']">Tournaments</button>
-        <button mat-button color="accent" [matMenuTriggerFor]="profile">Profile</button>
-        <mat-menu #profile="matMenu" style="color: rgb(207, 48, 207) !important; margin-right: 15px !important; font-size: 2.3vh !important; background: none !important; text-align: center !important; margin: auto !important;">
-            <button class="mobileMenuTab" mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['profile']">Settings</button>
-            <button class="mobileMenuTab" mat-button color="accent" (click)="authService.SignOut()">Sign out</button>
-        </mat-menu>
+        <button mat-button color="accent" (click)="toggleNav('none')" [routerLink]="['profile']">Profile</button>
+        <button mat-button color="accent" (click)="toggleNav('none')" (click)="authService.SignOut()">Sign out</button>
     </div>
 </div>

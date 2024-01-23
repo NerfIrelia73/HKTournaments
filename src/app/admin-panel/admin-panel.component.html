@@ -1,0 +1,42 @@
+<div style="margin: auto; color: white; text-align: center;">
+    <h1 style="font-size: 5.5vh;"><strong>Tournaments</strong></h1>
+</div>
+<div style="width: 80%; margin: auto; margin-bottom: 15px;">
+    <button (click)="createTournament()" style="background-color: white; margin-bottom: 10px;" mat-button color="basic">Create a Tournament</button>
+</div>
+<mat-divider style="width: 80%; margin: auto; border-top-color: rgb(207, 48, 207);"></mat-divider>
+<div class="eventTable">
+    <div style="margin: auto; width: 33%;">
+        <h3>Event Name</h3>
+    </div>
+    <div style="margin: auto; width: 33%;">
+        <h3>Details</h3>
+    </div>
+    <div style="margin: auto; width: 33%;">
+        <h3>Options</h3>
+    </div>
+</div>
+<div *ngFor="let tournament of tournaments" class="eventTable">
+    <div style="margin: auto; margin-top: 0; width: 33%;">
+        <div class="eventContainer">
+            <div>
+                <span>{{ tournament.name }}</span>
+            </div>
+        </div>
+    </div>
+    <div style="margin: auto; margin-top: 0; width: 33%;">
+        <div class="eventContainer">
+            <div>
+                <span>{{ tournament.details }}</span>
+            </div>
+        </div>
+    </div>
+    <div style="margin: auto; margin-top: 0; width: 33%;">
+        <div class="eventContainer">
+            <div>
+                <button (click)="editTournament(tournament.name, tournament.details, tournament.uid)" class="sign-up-btn" mat-raised-button color="success">Edit</button>
+                <button (click)="deleteTournament(tournament.name, tournament.uid)" class="sign-up-btn" mat-raised-button color="warn" style="margin-left: 10px;">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

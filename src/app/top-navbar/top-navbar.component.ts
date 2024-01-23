@@ -1,6 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { animate, animateChild, group, query, state, style, transition, trigger } from '@angular/animations';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthService } from "../shared/services/auth.service";
 import { User } from '../shared/services/user';
 import { NavigationEnd, Router } from '@angular/router';
@@ -72,7 +71,7 @@ import { filter } from 'rxjs';
 })
 export class TopNavbarComponent implements OnInit {
 
-  constructor(public authService: AuthService, public afs: AngularFirestore, public router: Router) {
+  constructor(public authService: AuthService, public router: Router) {
     this.router.events.pipe(filter((event: any) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.navTab = event.url.split("#")[0]
       if (this.navTab == '/sign-up' || this.navTab == '/sign-in' || this.navTab == '/forgot-password') {
@@ -92,6 +91,9 @@ export class TopNavbarComponent implements OnInit {
   @Output() newOption = new EventEmitter<string>();
 
   ngOnInit(): void {
+    this.authService.usersInfo.subscribe(info => {
+      this.userInfo = info
+    })
   }
 
   @HostListener('window:resize', ['$event'])

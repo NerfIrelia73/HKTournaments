@@ -224,6 +224,7 @@ export class MatchesComponent implements OnInit {
           discordId: "",
           twitch: "",
           pronouns: "",
+          siteAdmin: false,
           photoURL: "",
           emailVerified: false
        }

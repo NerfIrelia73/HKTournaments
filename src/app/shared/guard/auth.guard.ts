@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, NavigationEnd } from '@angular/router';
 import { AuthService } from "../../shared/services/auth.service";
 import { Observable } from 'rxjs';
 @Injectable({
@@ -17,6 +17,15 @@ export class AuthGuard implements CanActivate {
     if(this.authService.isLoggedIn !== true) {
       this.router.navigate(['sign-in'])
     }
+    this.router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd && val.url == '/admin-panel') {
+        this.authService.usersInfo.forEach((info) => {
+          if (info != null && (info.siteAdmin == null || !info.siteAdmin)) {
+            this.router.navigate([''])
+          }
+        })
+      }
+    });
     return true;
   }
 }

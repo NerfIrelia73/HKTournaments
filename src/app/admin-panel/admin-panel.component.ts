@@ -16,9 +16,16 @@ export class AdminPanelComponent {
 
   joinedTournaments: string[] | undefined
 
-  async ngOnInit() {
+  isSiteAdmin = false
+
+  ngOnInit() {
     this.authService.tournaments.subscribe(info => {
       this.tournaments = info
+    })
+    this.authService.usersInfo.forEach((info) => {
+      if (info != null && info.siteAdmin != null) {
+        this.isSiteAdmin = info.siteAdmin
+      }
     })
   }
 

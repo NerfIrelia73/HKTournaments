@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { UntypedFormControl } from '@angular/forms';
-import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { adminInfo } from './participant';
 import { User } from '../shared/services/user';
@@ -37,12 +36,8 @@ import { LazyDialogService } from '../shared/services/lazy-dialog.service';
 })
 export class MatchesComponent implements OnInit {
 
-  constructor(public afs: AngularFirestore, public router: Router, public userService: UserListService, public authService: AuthService, public lazyDialog: LazyDialogService) {
-    router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd && val.url != '/') {
-        this.subscription?.unsubscribe()
-      }
-  });
+  constructor(public afs: AngularFirestore, public userService: UserListService, public authService: AuthService, public lazyDialog: LazyDialogService) {
+
   }
 
   @Input() matchFilter: string = ""
@@ -61,10 +56,11 @@ export class MatchesComponent implements OnInit {
   resetDataSource: any = []
   userList: User[] = []
   subscription: Subscription | undefined
+  authSubscription: Subscription | undefined
   adminTournaments: string[] = []
 
   ngOnInit(): void {
-    this.authService.adminInfo.subscribe(info => {
+    this.authSubscription = this.authService.adminInfo.subscribe(info => {
       this.adminInfo = info
       this.adminTournaments = info.tournaments.filter((a) => {
         if (a.admin) {
@@ -99,6 +95,10 @@ export class MatchesComponent implements OnInit {
         return tmp.includes(value.matchId)
       })
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe()
   }
 
   updateSelectedTournaments(event: any) {

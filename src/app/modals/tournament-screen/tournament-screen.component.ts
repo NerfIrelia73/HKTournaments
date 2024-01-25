@@ -17,7 +17,9 @@ import { Subscription } from 'rxjs';
 })
 export class TournamentScreenComponent {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public afs: AngularFirestore, private dialogRef: MatDialogRef<TournamentScreenComponent>) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public afs: AngularFirestore, private dialogRef: MatDialogRef<TournamentScreenComponent>) {
+
+  }
 
   name = new FormControl('')
   description = new FormControl('')
@@ -57,6 +59,11 @@ export class TournamentScreenComponent {
     if (this.data.description != null) {
       this.description?.setValue(this.data.description)
     }
+  }
+
+  ngOnDestroy() {
+    this.userSub?.unsubscribe()
+    this.adminSub?.unsubscribe()
   }
 
   async createTournament() {

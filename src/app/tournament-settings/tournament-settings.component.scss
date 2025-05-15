@@ -1,0 +1,74 @@
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+
+  mat-form-field {
+    width: 300px;
+  }
+
+  .bigContainer {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 0px 15px 15px 15px;
+    box-shadow: -1px 1px 10px 1px black;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: none;
+
+    .drag-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+      min-height: 50px;
+      margin-bottom: 10px;
+    }
+
+    .participant-item {
+      display: flex;
+      color: white;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: #cf30cf;
+      border: 1px solid black;
+      border-radius: 6px;
+      cursor: move;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #c045c0;
+      }
+
+      .seed-number {
+        font-weight: bold;
+        width: 30px;
+      }
+
+      .display-name {
+        flex: 1;
+      }
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    color: rgb(238, 238, 238);
+    font-size: 2.8vh;
+    text-align: center;
+    padding: 5px;
+}
+
+::ng-deep .mdc-form-field > label  {
+  color: white !important;
+}

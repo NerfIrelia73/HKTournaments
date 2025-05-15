@@ -111,6 +111,7 @@ export class CreateMatchComponent implements OnInit {
                 return a.displayName.localeCompare(b.displayName)
               })
             }
+            console.log(this.tournaments)
           }
         );
       }

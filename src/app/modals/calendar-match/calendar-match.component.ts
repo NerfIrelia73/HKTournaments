@@ -38,4 +38,5 @@ export class CalendarMatchComponent implements OnInit {
     declarations: [CalendarMatchComponent],
     imports: [MatDialogModule, SharedModule]
 })
+
 export class CalendarMatchModule {}

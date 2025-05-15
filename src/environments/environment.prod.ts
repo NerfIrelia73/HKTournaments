@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   firebase: {
     apiKey: "AIzaSyCpQT8uCT33TXA0xaJajA0R0HwQUgtZFL8",
     authDomain: "hk-tournaments.firebaseapp.com",

@@ -2,7 +2,9 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { adminInfo } from '../matches/participant';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { arrayUnion } from '@angular/fire/firestore';
 import { AuthService } from '../shared/services/auth.service';
+import { Tournament } from '../shared/services/tournament';
 
 @Component({
   selector: 'app-tournament-sign-up',
@@ -18,15 +20,13 @@ export class TournamentSignUpComponent implements OnInit {
     displayName: "",
     tournaments: []
   }
-  tournaments: {name: string, uid: string, details: string}[] = []
+  tournaments: Tournament[] = []
 
-  joinedTournaments: string[] | undefined
   faCheck = faCheck
 
   async ngOnInit() {
     this.authService.adminInfo.subscribe(info => {
       this.adminInfo = info
-      this.joinedTournaments = this.adminInfo.tournaments.map(a => a.tournamentId)
     })
     this.authService.tournaments.subscribe(info => {
       this.tournaments = info
@@ -36,16 +36,27 @@ export class TournamentSignUpComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
   }
 
-  addToTournament(tournamentId: string) {
-    const participationData = {
-      admin: false,
-      superadmin: false,
-      uid: this.adminInfo?.uid
-    }
+  addToTournament(tournament: any) {
+    //console.log(tournament)
+    //console.log(this.adminInfo)
 
-    this.afs.collection(`tournaments/${tournamentId}/participants`).add(
-      participationData
-    )
+    this.afs.doc(`tournaments/${tournament.uid}`).update({
+      participants: arrayUnion({
+        displayName: this.adminInfo.displayName,
+        uid: this.adminInfo.uid,
+        seed: 0
+      })
+    })
+  }
+
+  passedDeadline(deadline: Date): boolean {
+    if (!deadline) return false;
+    const d = new Date();
+    return d > deadline;
+  }
+
+  isParticipant(tournament: Tournament, uid: string) {
+    return tournament.participants.some((x: any) => x.uid == uid);
   }
 
 }

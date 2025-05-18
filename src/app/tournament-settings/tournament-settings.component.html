@@ -27,20 +27,19 @@
       <h2 style="color: white;">Seed Participants</h2>
 
       <div
-        cdkDropList
-        [cdkDropListData]="tournaments[tournamentIndex].seeds"
-        (cdkDropListDropped)="drop($event)"
-        class="drag-list"
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      class="participant-list"
+    >
+      <div
+        *ngFor="let participant of tournaments[tournamentIndex].participants"
+        cdkDrag
+        class="participant-item"
       >
-        <div
-          class="participant-item"
-          *ngFor="let p of tournaments[tournamentIndex].seeds; index as i"
-          cdkDrag
-        >
-          <span class="seed-number">#{{ i + 1 }}</span>
-          <span class="display-name">{{ p.displayName }}</span>
-        </div>
+        {{ participant.displayName }}
+        <span *ngIf="seedingEnabled">- Seed: {{ participant.seed || 'Unseeded' }}</span>
       </div>
+    </div>
 
     <div class="action-buttons">
       <button mat-raised-button color="accent" (click)="saveSettings()">

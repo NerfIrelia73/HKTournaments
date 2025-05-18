@@ -19,5 +19,12 @@
   },
   "storage": {
     "rules": "storage.rules"
+  },
+  "emulators": {
+    "firestore": {
+      "port": 8080
+    },
+    "import": "C:/firestore-backups/backup-folder-v3",
+    "exportOnExit": true
   }
 }

@@ -10,6 +10,9 @@
         <h3>Details</h3>
     </div>
     <div style="margin: auto; width: 33%;">
+        <h3>Signup Deadline</h3>
+    </div>
+    <div style="margin: auto; width: 33%;">
         <h3>Signed Up?</h3>
     </div>
 </div>
@@ -24,15 +27,22 @@
     <div style="margin: auto; margin-top: 0; width: 33%;">
         <div class="eventContainer">
             <div>
-                <span>{{ tournament.details }}</span>
+                <span>{{ tournament.description }}</span>
             </div>
         </div>
     </div>
     <div style="margin: auto; margin-top: 0; width: 33%;">
         <div class="eventContainer">
             <div>
-                <button *ngIf="joinedTournaments != null && !joinedTournaments.includes(tournament.uid)" class="sign-up-btn" mat-raised-button color="success" (click)="addToTournament(tournament.uid)">Sign Up</button>
-                <button *ngIf="joinedTournaments != null &&  joinedTournaments.includes(tournament.uid)" class="sign-up-btn" mat-raised-button color="success"><fa-icon [icon]="faCheck"></fa-icon></button>
+                <span>{{ tournament.deadline.toDate() }}</span>
+            </div>
+        </div>
+    </div>
+    <div style="margin: auto; margin-top: 0; width: 33%;">
+        <div class="eventContainer">
+            <div>
+                <button *ngIf="!isParticipant(tournament, adminInfo.uid)" [disabled]="passedDeadline(tournament.deadline.toDate())" class="sign-up-btn" mat-raised-button color="success" (click)="addToTournament(tournament)">Sign Up</button>
+                <button *ngIf="isParticipant(tournament, adminInfo.uid)" class="sign-up-btn" mat-raised-button color="success"><fa-icon [icon]="faCheck"></fa-icon></button>
             </div>
         </div>
     </div>

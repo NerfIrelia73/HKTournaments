@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { LazyDialogService } from '../shared/services/lazy-dialog.service';
 import { Subscription } from 'rxjs';
 import { adminInfo } from '../matches/participant';
+import { Tournament } from '../shared/services/tournament';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,7 @@ export class HomeComponent implements OnInit {
       displayName: "",
       tournaments: []
     }
-    tournaments: {name: string, uid: string, details: string}[] = []
+    tournaments: Tournament[] = []
     authSubscription: Subscription | undefined
     adminTournaments: string[] = []
     selectedTournaments: string[] = []
@@ -28,19 +29,11 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.authSubscription = this.authService.adminInfo.subscribe(info => {
       this.adminInfo = info
-      this.adminTournaments = info.tournaments.filter((a) => {
-        if (a.admin) {
-          return true
-        } else {
-          return false
-        }
-      }).map((a) => a.tournamentId)
-      console.log(this.adminInfo)
-      console.log(this.adminTournaments)
     })
     this.authService.tournaments.subscribe(info => {
       this.tournaments = info
       this.selectedTournaments = info.map((a: { uid: any; }) => a.uid)
+      this.adminTournaments = info.filter(tournament => tournament.admins.includes(this.adminInfo.uid)).map(tournament => tournament.uid);
     })
   }
 

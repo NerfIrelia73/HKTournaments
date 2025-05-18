@@ -16,6 +16,7 @@ export class ConfirmScreenComponent {
   }
 
   ngOnInit() {
+    //console.log(this.data)
   }
 
   async confirm() {
@@ -30,11 +31,6 @@ export class ConfirmScreenComponent {
       })
       this.dialogRef.close()
     } else if (this.data.choice == "tournament") {
-      this.afs.collection(`tournaments/${this.data.tournamentId}/participants`).snapshotChanges().subscribe(async (resp) => {
-        for (const item of resp) {
-          this.afs.doc(`tournaments/${this.data.tournamentId}/participants/${item.payload.doc.id}`).delete()
-        }
-      })
       this.afs.collection(`tournaments/${this.data.tournamentId}/matches`).snapshotChanges().subscribe(async (resp) => {
         for (const item of resp) {
           this.afs.doc(`tournaments/${this.data.tournamentId}/matches/${item.payload.doc.id}`).delete()

@@ -5,6 +5,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { Participant, User } from '../shared/services/user';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Tournament } from '../shared/services/tournament';
 
 @Component({
   selector: 'app-create-match',
@@ -18,7 +19,7 @@ export class CreateMatchComponent implements OnInit {
 
 
   runnerList: Participant[] = []
-  tournaments: {name: string, uid: string, participants: User[]}[] = []
+  tournaments: Tournament[] = []
   tournamentIndex = -1
   selectedTournament = new UntypedFormControl('')
   participantList: User[] = []
@@ -79,45 +80,14 @@ export class CreateMatchComponent implements OnInit {
   ]
 
   ngOnInit(): void {
-    this.afs.collection('tournaments').get().forEach(async (resp) => {
-      this.tournaments = []
-      for (const item of resp.docs) {
-        this.tournaments.push({
-          name: (item.data() as any).name,
-          uid: item.id,
-          participants: []
-        })
-      }
-    });
-
-    this.afs.collection('users', ref => ref.orderBy('displayName')).get().forEach(
-      (val) => {
-        this.participantList = []
-        for (const item of val.docs) {
-          this.participantList.push(item.data() as User)
-        }
-        this.afs.collectionGroup('participants').get().forEach(
-          (resp) => {
-            for (const item of resp.docs) {
-              const user = this.participantList.filter(user => {
-                return user.uid == (item.data() as any).uid
-              })
-              const index = this.tournaments.findIndex(tournament => tournament.uid == item.ref.parent.parent?.id)
-              if (!this.tournaments[index].participants.includes(user[0]))
-              this.tournaments[index].participants.push(user[0])
-            }
-            for (const tournament of this.tournaments) {
-              tournament.participants = tournament.participants.sort((a, b) => {
-                return a.displayName.localeCompare(b.displayName)
-              })
-            }
-            console.log(this.tournaments)
-          }
-        );
-      }
-    );
-
+    this.authService.tournaments.subscribe(info => {
+      this.tournaments = info
+      //console.log(this.tournaments)
+    })
     this.selectedTournament.valueChanges.subscribe(val => {
+      //console.log(this.selectedTournament)
+      //console.log(this.tournamentIndex)
+      //console.log(val)
       this.selectedParticipants.setValue([])
       this.tournamentIndex = this.tournaments.findIndex(tournament => tournament.uid == val)
     })

@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -32,6 +34,8 @@ import 'firebase/compat/firestore';
     MatSelectModule,
     MatTabsModule,
     MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),

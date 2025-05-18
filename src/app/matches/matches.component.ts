@@ -9,6 +9,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { LazyDialogService } from '../shared/services/lazy-dialog.service';
+import { Tournament } from '../shared/services/tournament';
 
 @Component({
   selector: 'app-matches',
@@ -48,7 +49,7 @@ export class MatchesComponent implements OnInit {
     displayName: "",
     tournaments: []
   }
-  tournaments: {name: string, uid: string, details: string}[] = []
+  tournaments: Tournament[] = []
   selectedView = new UntypedFormControl("list")
   selectedTournaments: string[] = []
   displayedColumns: string[] = ['Runners', 'Comms', 'Restreamer', 'Date', 'Locked']
@@ -62,21 +63,21 @@ export class MatchesComponent implements OnInit {
   ngOnInit(): void {
     this.authSubscription = this.authService.adminInfo.subscribe(info => {
       this.adminInfo = info
-      this.adminTournaments = info.tournaments.filter((a) => {
-        if (a.admin) {
-          return true
-        } else {
-          return false
-        }
-      }).map((a) => a.tournamentId)
     })
     this.authService.tournaments.subscribe(info => {
       this.tournaments = info
       this.selectedTournaments = info.map((a: { uid: any; }) => a.uid)
+      this.adminTournaments = info.filter(tournament => tournament.admins.includes(this.adminInfo.uid)).map(tournament => tournament.uid);
+      //console.log("Admin tournament stuff")
+      //console.log(this.tournaments)
+      //console.log(this.adminInfo)
+      //console.log(this.adminTournaments)
     })
 
     this.userList = this.userService.getUserList()
     this.subscription = this.afs.collectionGroup('matches', ref => ref.orderBy('date')).snapshotChanges().subscribe(async (resp) => {
+      //console.log("DOING MATCHES STUFF")
+      //console.log(resp)
       for (const item of resp) {
         const index = this.dataSource.findIndex((source: any) => source.matchId == item.payload.doc.id)
         if (item.type == "added" && index == -1) {
@@ -110,6 +111,7 @@ export class MatchesComponent implements OnInit {
   }
 
   async createDataEntry(data: any, id: string, tournament: string) {
+    //console.log(data)
     const d = data.date.toDate()
     let c = "";
     if (data.createdOn != null) {
@@ -228,13 +230,15 @@ export class MatchesComponent implements OnInit {
           photoURL: "",
           emailVerified: false
        }
+        //console.log(user)
         await this.afs.collection('users').doc(user).ref.get().then(function (doc) {
           if (doc.exists) {
+            //console.log("DOC EXISTS")
             retList.push(doc.data() as User)
             tmpUser = doc.data() as User
           }
         }).catch(function (error) {
-
+          //console.log(error)
         });
         this.userService.addToList(tmpUser)
       }

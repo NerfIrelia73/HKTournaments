@@ -1,18 +1,26 @@
-<div class="container" style="background-color: #2f3136; height: 100%; background-image: linear-gradient(to right, #1a1b1e 35%, #050d22);">
+<div class="container">
     <div class="header">
         <h1><strong>{{data.choice == "create" ? "Create" : "Edit"}} a Tournament</strong></h1>
     </div>
-    <div class="bigContainer">
+    <div class="dialogContent">
         <div class="infoContainer">
             <h3>Tournament Name</h3>
             <input type="text" class="login__input" [formControl]="name">
         </div>
-        <mat-divider style="width: 80%; margin: auto; border-top-color: rgb(207, 48, 207);"></mat-divider>
         <div class="infoContainer">
             <h3>Tournament Description</h3>
             <input type="text" class="login__input" [formControl]="description">
         </div>
-        <mat-divider style="width: 80%; margin: auto; border-top-color: rgb(207, 48, 207);"></mat-divider>
+        <div class="infoContainer">
+            <h3>Tournament Signup Deadline</h3>
+            <mat-form-field appearance="fill" style="margin-right: 20px;">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" [readonly]="true" [formControl]="deadline">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
         <div class="infoContainer">
             <h3>Tournament Admins</h3>
             <mat-form-field appearance="fill">
@@ -22,7 +30,7 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div class="infoContainer" style="display: flex; justify-content: right;">
+        <div class="dialogActions" style="display: flex; justify-content: right;">
             <button mat-raised-button color="warn" style="color: white;" (click)="cancel()">Cancel</button>
             <button *ngIf="data.choice == 'create'" mat-raised-button color="success" style="background-color: #155724; margin-left: 10px; color: white;" (click)="createTournament()">Create</button>
             <button *ngIf="data.choice == 'edit'" mat-raised-button color="success" style="background-color: #155724; margin-left: 10px; color: white;" (click)="editTournament()">Confirm</button>

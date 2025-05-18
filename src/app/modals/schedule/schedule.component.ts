@@ -12,6 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Tournament } from 'src/app/shared/services/tournament';
 
 @Component({
   selector: 'app-schedule',
@@ -42,7 +43,7 @@ export class ScheduleComponent implements OnInit {
   constructor(public afs: AngularFirestore, public userService: UserListService) { }
 
   displayedColumns: string[] = ['Runners', 'Comms', 'Restreamer', 'Date', 'Locked']
-  tournaments: {name: string, uid: string, details: string}[] = []
+  tournaments: Tournament[] = []
   selectedTournaments: string[] = []
   userList: User[] = []
   dataSource: any = []
@@ -73,12 +74,12 @@ export class ScheduleComponent implements OnInit {
       const tournaments = []
       for (const item of resp) {
         tournaments.push({
-          name: (item.payload.doc.data() as any).name,
-          uid: item.payload.doc.id,
-          details: (item.payload.doc.data() as any).description
+          ...(item.payload.doc.data() as any),
+          uid: item.payload.doc.id
         })
       }
       this.tournaments = tournaments
+      //console.log("SCHEDULE TOURNAMENTS")
       this.selectedTournaments = tournaments.map((a: { uid: any; }) => a.uid)
     });
   }

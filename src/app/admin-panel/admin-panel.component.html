@@ -28,14 +28,14 @@
         <div style="margin: auto; margin-top: 0; width: 33%;">
             <div class="eventContainer">
                 <div>
-                    <span>{{ tournament.details }}</span>
+                    <span>{{ tournament.description }}</span>
                 </div>
             </div>
         </div>
         <div style="margin: auto; margin-top: 0; width: 33%;">
             <div class="eventContainer">
                 <div>
-                    <button (click)="editTournament(tournament.name, tournament.details, tournament.uid)" class="sign-up-btn" mat-raised-button color="success">Edit</button>
+                    <button (click)="editTournament(tournament.name, tournament.description, tournament.uid, tournament.admins, tournament.deadline)" class="sign-up-btn" mat-raised-button color="success">Edit</button>
                     <button (click)="deleteTournament(tournament.name, tournament.uid)" class="sign-up-btn" mat-raised-button color="warn" style="margin-left: 10px;">Delete</button>
                 </div>
             </div>

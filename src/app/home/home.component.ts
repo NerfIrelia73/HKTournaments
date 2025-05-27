@@ -29,11 +29,11 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.authSubscription = this.authService.adminInfo.subscribe(info => {
       this.adminInfo = info
+      this.adminTournaments = this.tournaments.filter(tournament => tournament.admins.includes(this.adminInfo.uid)).map(tournament => tournament.uid);
     })
     this.authService.tournaments.subscribe(info => {
       this.tournaments = info
       this.selectedTournaments = info.map((a: { uid: any; }) => a.uid)
-      this.adminTournaments = info.filter(tournament => tournament.admins.includes(this.adminInfo.uid)).map(tournament => tournament.uid);
     })
   }
 

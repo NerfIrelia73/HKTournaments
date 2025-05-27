@@ -1,15 +1,11 @@
-<!--
-<mat-tab-group>
-    <mat-tab label="Matches">
-        <app-matches></app-matches>
-    </mat-tab>
-    <mat-tab *ngIf="adminInfo != null && adminTournaments.length > 0" label="Tournament Settings">
-        <app-tournament-settings></app-tournament-settings>
-    </mat-tab>
-    <mat-tab label="Bracket">
-        <app-bracket></app-bracket>
-    </mat-tab>
+<mat-tab-group class="fancy-tab-group">
+  <mat-tab label="Matches">
+    <app-matches></app-matches>
+  </mat-tab>
+  <mat-tab *ngIf="adminInfo != null && adminTournaments.length > 0" label="Tournament Settings">
+    <app-tournament-settings></app-tournament-settings>
+  </mat-tab>
+  <mat-tab label="Bracket">
+    <app-bracket></app-bracket>
+  </mat-tab>
 </mat-tab-group>
--->
-
-<app-matches></app-matches>

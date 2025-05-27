@@ -1,6 +1,6 @@
 import { ComponentType } from '@angular/cdk/overlay';
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 export class LazyDialogService {
   constructor(private dialog: MatDialog) {}
 
-  async openDialog(dialogName: string, config: any): Promise<MatDialogRef<any>> {
+  async openDialog(dialogName: string, config: MatDialogConfig<any>): Promise<MatDialogRef<any>> {
     const chunk = await import(
       `../../modals/${dialogName}/${dialogName}.component`
     );

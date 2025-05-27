@@ -18,7 +18,19 @@ import { SharedRoutingModule } from './shared-routing.module';
 import { MatchesComponent } from '../matches/matches.component';
 import { TournamentSettingsComponent } from '../tournament-settings/tournament-settings.component';
 import { BracketComponent } from '../bracket/bracket.component';
+import { StageType } from 'brackets-model';
 
+declare global {
+  interface Window {
+    bracketsViewer?: any | undefined;
+  }
+
+  interface Dataset {
+    title: string;
+    type: StageType;
+    roster: { id: number; name: string }[];
+  }
+}
 
 @NgModule({
   declarations: [MatchesComponent, CalendarComponent, TournamentSettingsComponent, BracketComponent],

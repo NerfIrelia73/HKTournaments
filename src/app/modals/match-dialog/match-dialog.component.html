@@ -1,0 +1,40 @@
+<mat-card class="match-dialog-card">
+
+  <h2 mat-dialog-title class="dialog-title">Match Details</h2>
+
+  <div mat-dialog-content class="dialog-content">
+    <div class="match-info">
+      <p><strong>{{ data.bracket == "winners" ? "Winner's" : "Loser's"}} {{ "Bracket " + (data.round + 1) + "." + (data.match + 1) }}</strong></p>
+    </div>
+
+    <div class="runners">
+      <div class="runner-card" [ngClass]="{ 'winner': data.result === 1, 'loser': data.result === 2, 'pending': data.result === 0 }">
+        <div class="seed">{{ data.matchData.opponent1 != null && data.matchData.opponent1 != -1 ? "#" + data.matchData.opponent1.seed : '-' }}</div>
+        <div class="name">{{ data.matchData.opponent1 != null && data.matchData.opponent1 != -1 ? data.matchData.opponent1.displayName : 'BYE' }}</div>
+      </div>
+
+      <div class="vs-text">vs</div>
+
+      <div class="runner-card" [ngClass]="{ 'winner': data.result === 2, 'loser': data.result === 1, 'pending': data.result === 0 }">
+        <div class="seed">{{ data.matchData.opponent2 != null && data.matchData.opponent2 != -1 ? "#" + data.matchData.opponent2.seed : '-' }}</div>
+        <div class="name">{{ data.matchData.opponent2 != null && data.matchData.opponent2 != -1 ? data.matchData.opponent2.displayName : 'BYE' }}</div>
+      </div>
+    </div>
+
+    <p class="status">
+      <strong>Status: </strong>
+      <span [ngClass]="{
+        'pending': data.result === 0,
+        'completed': data.result === 1 || data.result === 2
+      }">
+           {{data.result === 0 ? 'Pending' : 'Completed'}}
+      </span>
+    </p>
+  </div>
+
+  <mat-card-actions align="end" class="dialog-actions" *ngIf="data.adminInfo != null && (data.matchData.opponent1.uid == data.adminInfo.uid || data.matchData.opponent2.uid == data.adminInfo.uid || data.tournament.admins.includes(data.adminInfo.uid))">
+    <button *ngIf="data.matchData.opponent2.uid == data.adminInfo.uid || data.tournament.admins.includes(data.adminInfo.uid)" mat-raised-button color="success" style="background-color: #155724;" (click)="reportResult(1)" [disabled]="!data.matchData.opponent1">{{ data.matchData.opponent1 != null && data.matchData.opponent1 != -1 ? data.matchData.opponent1.displayName : 'BYE' }} Wins</button>
+    <button *ngIf="data.matchData.opponent1.uid == data.adminInfo.uid || data.tournament.admins.includes(data.adminInfo.uid)" mat-raised-button color="success" style="background-color: #155724;" (click)="reportResult(2)" [disabled]="!data.matchData.opponent2">{{ data.matchData.opponent2 != null && data.matchData.opponent2 != -1 ? data.matchData.opponent2.displayName : 'BYE' }} Wins</button>
+  </mat-card-actions>
+
+</mat-card>

@@ -38,11 +38,13 @@ export class ConfirmScreenComponent {
       })
       this.afs.doc(`tournaments/${this.data.tournamentId}`).delete()
       this.dialogRef.close()
+    } else {
+      this.dialogRef.close(true);
     }
   }
 
   cancel() {
-    this.dialogRef.close()
+    this.dialogRef.close(false)
   }
 
 }

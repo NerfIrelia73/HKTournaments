@@ -23,23 +23,30 @@
       </mat-slide-toggle>
     </div>
 
-    <div *ngIf="tournaments[tournamentIndex].seedingEnabled" class="bigContainer">
-      <h2 style="color: white;">Seed Participants</h2>
+    <div class="bigContainer">
+      <h2 style="color: white;">Participant List</h2>
 
       <div
-      cdkDropList
-      (cdkDropListDropped)="drop($event)"
-      class="participant-list"
-    >
-      <div
-        *ngFor="let participant of tournaments[tournamentIndex].participants"
-        cdkDrag
-        class="participant-item"
+        cdkDropList
+        (cdkDropListDropped)="drop($event)"
+        class="participant-list"
       >
-        {{ participant.displayName }}
-        <span *ngIf="seedingEnabled">- Seed: {{ participant.seed || 'Unseeded' }}</span>
+        <div
+          *ngFor="let participant of tournaments[tournamentIndex].participants; let i = index"
+          cdkDrag
+          class="participant-item"
+        >
+          <div class="participant-details">
+            <div class="participant-info">
+              {{ participant.displayName }}
+              <span *ngIf="tournaments[tournamentIndex].seedingEnabled">- Seed: {{ participant.seed }}</span>
+            </div>
+            <button mat-raised-button color="warn" (click)="removeParticipant(participant)">
+              Remove Participant
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
 
     <div class="action-buttons">
       <button mat-raised-button color="accent" (click)="saveSettings()">

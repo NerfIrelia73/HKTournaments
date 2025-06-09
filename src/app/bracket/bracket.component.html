@@ -1,1 +1,94 @@
-<p>bracket works!</p>
+<div *ngIf="tournaments.length > 0; else loadingBlock" class="settings-container">
+  <mat-form-field appearance="fill" style="margin: auto;">
+    <mat-label>Select Tournament</mat-label>
+    <mat-select [formControl]="selectedTournament">
+      <mat-option *ngFor="let tournament of tournaments" [value]="tournament.uid">
+        {{ tournament.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div *ngIf="selectedTournament.value != null" class="brackets-viewer"
+    (mousedown)="startDrag($event)"
+    (mousemove)="onDrag($event)"
+    (mouseup)="stopDrag()"
+    (mouseleave)="stopDrag()"
+    #scrollContainer
+  >
+  <div>
+  <button (click)="startTournament()" mat-raised-button color="success" [ngStyle]="{ 'background-color': tournament.started ? '#f44336' : '#155724' }" *ngIf="adminInfo != null && tournament.admins.includes(adminInfo.uid)">{{ tournament.started ? 'Reset Bracket' : 'Start Bracket' }}</button>
+  <button (click)="generateBracket()" mat-raised-button color="success" style="background-color: #155724; margin-left: 10px;" *ngIf="adminInfo != null && tournament.admins.includes(adminInfo.uid)" [disabled]="tournament.started">Generate Bracket</button>
+  </div>
+  <div *ngIf="winnersBracket.length > 0" class="elimination" data-stage-id="0">
+    <h1>{{ tournament.name }}</h1>
+    <section class="bracket" data-group-id="0">
+      <h2>Winner's Bracket</h2>
+      <div class="rounds">
+        <article *ngFor="let round of winnersBracket; let roundIndex = index" class="round">
+          <h3>{{ roundIndex == winnersBracket.length - 1 ? 'Grand Finals' : roundIndex == winnersBracket.length - 2 ? 'Winner\'s Finals' : roundIndex == winnersBracket.length - 3 ? 'Winner\'s Semi-Finals' : roundIndex == winnersBracket.length - 4 ? 'Winner\'s Quarter-Finals' : 'Winner\'s Round ' + (roundIndex + 1)}}</h3>
+          <div *ngFor="let match of round; let matchIndex = index" [ngClass]="winnersBracket[roundIndex + 1] != null && winnersBracket[roundIndex].length == winnersBracket[roundIndex + 1].length ? 'match connect-next straight' : winnersBracket[roundIndex + 1] == null ? 'match' : 'match connect-next'">
+            <div [ngClass]="roundIndex == 0 ? 'opponents' : 'opponents connect-previous'" data-match-id="0" (click)="updateMatch('winners', matchIndex, roundIndex, match)">
+              <span title="Locked">WB {{ (roundIndex + 1) + "." + (matchIndex + 1) }}</span>
+              <div class="participant"
+                [ngClass]="{
+                  'win': match.result === 1,
+                  'loss': match.result === 2
+                }">
+                <div class="name" [ngClass]="{ 'placeholder-opponent': match.opponent1 == null }">
+                  <span>{{ match.opponent1 != null && match.opponent1 != -1 ? "#" + match.opponent1.seed : "" }} </span>{{ match.opponent1 != null && match.opponent1 != -1 ? match.opponent1.displayName : match.tmpOpponent1 }}
+                </div>
+                  <div class="result">{{ match.result === 1 ? 'W' : (match.result === 2 ? 'L' : '-') }}</div>
+                </div>
+                <div class="participant"
+                [ngClass]="{
+                  'win': match.result === 2,
+                  'loss': match.result === 1
+                }">
+                  <div class="name" [ngClass]="{ 'placeholder-opponent': match.opponent2 == null }">
+                    <span>{{ match.opponent2 != null && match.opponent2 != -1 ? "#" + match.opponent2.seed : "" }} </span>{{ match.opponent2 != null && match.opponent2 != -1 ? match.opponent2.displayName : roundIndex == 0 ? "BYE" : match.tmpOpponent2 }}
+                  </div>
+                  <div class="result">{{ match.result === 2 ? 'W' : (match.result === 1 ? 'L' : '-') }}</div>
+                </div>
+              </div>
+            </div>
+            </article>
+            </div>
+      <h2>Losers's Bracket</h2>
+      <div class="rounds">
+        <article *ngFor="let round of losersBracket; let roundIndex = index" class="round">
+          <h3>{{ roundIndex == losersBracket.length - 1 ? 'Loser\'s Finals' : roundIndex == losersBracket.length - 2 ? 'Loser\'s Semi-Finals' : roundIndex == losersBracket.length - 3 ? 'Loser\'s Quarter-Finals' : 'Loser\'s Round ' + (roundIndex + 1)}}</h3>
+          <div *ngFor="let match of round; let matchIndex = index" [ngClass]="losersBracket[roundIndex + 1] != null && losersBracket[roundIndex].length == losersBracket[roundIndex + 1].length ? 'match connect-next straight' : losersBracket[roundIndex + 1] == null ? 'match' : 'match connect-next'">
+            <div [ngClass]="roundIndex == 0 ? 'opponents' : 'opponents connect-previous'" data-match-id="0" (click)="updateMatch('losers', matchIndex, roundIndex, match)">
+              <span title="Locked">LB {{ (roundIndex + 1) + "." + (matchIndex + 1) }}</span>
+              <div class="participant"
+                [ngClass]="{
+                  'win': match.result === 1,
+                  'loss': match.result === 2
+                }">
+                <div class="name" [ngClass]="{ 'placeholder-opponent': match.opponent1 == null }">
+                  <span>{{ match.opponent1 != null && match.opponent1 != -1 ? "#" + match.opponent1.seed : "" }} </span>{{ match.opponent1 != null && match.opponent1 != -1 ? match.opponent1.displayName : match.opponent1 == -1 ? "BYE" : match.tmpOpponent1 }}
+                </div>
+                  <div class="result">{{ match.result === 1 ? 'W' : (match.result === 2 ? 'L' : '-') }}</div>
+                </div>
+                <div class="participant"
+                [ngClass]="{
+                  'win': match.result === 2,
+                  'loss': match.result === 1
+                }">
+                  <div class="name" [ngClass]="{ 'placeholder-opponent': match.opponent2 == null }">
+                    <span>{{ match.opponent2 != null && match.opponent2 != -1 ? "#" + match.opponent2.seed : "" }} </span>{{ match.opponent2 != null && match.opponent2 != -1 ? match.opponent2.displayName : match.opponent2 == -1 ? "BYE" : match.tmpOpponent2 }}
+                  </div>
+                  <div class="result">{{ match.result === 2 ? 'W' : (match.result === 1 ? 'L' : '-') }}</div>
+                </div>
+              </div>
+            </div>
+            </article>
+            </div>
+            </section>
+            </div>
+            </div>
+
+<ng-template #loadingBlock>
+  <p>Loading tournaments...</p>
+</ng-template>

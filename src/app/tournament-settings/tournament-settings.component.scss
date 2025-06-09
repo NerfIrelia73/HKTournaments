@@ -9,7 +9,7 @@
   }
 
   .bigContainer {
-    width: 50%;
+    width: 70%;
     margin: auto;
     margin-bottom: 10px;
     padding: 0px 15px 15px 15px;
@@ -29,18 +29,20 @@
 
     .participant-item {
       display: flex;
+      flex-direction: column;
+      padding: 8px;
+      border-radius: 8px;
+      gap: 8px;
       color: white;
-      align-items: center;
-      gap: 12px;
       padding: 8px 12px;
-      background: #cf30cf;
+      background: linear-gradient(135deg, #930736, #3f0549);
       border: 1px solid black;
       border-radius: 6px;
       cursor: move;
       transition: all 0.2s;
 
       &:hover {
-        background: #c045c0;
+        background: linear-gradient(135deg, #a50a3e, #4e085a);
       }
 
       .seed-number {
@@ -57,6 +59,7 @@
   .action-buttons {
     display: flex;
     gap: 10px;
+    margin-top: 10px;
   }
 }
 
@@ -67,6 +70,36 @@
     font-size: 2.8vh;
     text-align: center;
     padding: 5px;
+}
+
+.participant-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.participant-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.participant-info {
+  font-weight: 600;
+  color: #fff;
+}
+
+.participant-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.participant-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 220px; // or fixed width like 250px
 }
 
 ::ng-deep .mdc-form-field > label  {
